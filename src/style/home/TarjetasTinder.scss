@@ -1,0 +1,33 @@
+.tarjeta {
+  position: relative;
+  width: 600px;
+  padding: 20px;
+  max-width: 85vw;
+  height: 50vh;
+  border-radius: 20px;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 20px 25px 0 rgba(0, 0, 0, 0.356);
+}
+
+.tarjeta h2 {
+  position: absolute;
+  bottom: 20px;
+  color: white;
+}
+
+.tarjeta h4 {
+  position: absolute;
+  color: white;
+  bottom: -3px;
+}
+
+.tarjetasTinder__contenedor {
+  display: flex;
+  justify-content: center;
+  margin-top: 5vh;
+}
+
+.swipe {
+  position: absolute;
+}

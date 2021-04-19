@@ -1,0 +1,48 @@
+.rowed-elements{
+  display: flex;
+  align-items: center;
+  margin-bottom: 5%;
+}
+
+.checkboxes{
+  margin-left: 10%;
+
+}
+
+#user-data-button-container {
+  display: flex;
+  flex-direction: row;
+  margin-right: 0;
+  margin-left: auto;
+  margin-top: 20%;
+  width: max-content;
+  button {
+    margin-left: 2rem;
+    margin-right: 0rem;
+  }
+}
+
+.three-checkboxes{
+  display: flex;
+  flex-direction: column;
+  margin-top:3%;
+}
+
+.checkboxes-pref{
+  display: flex;
+  flex-direction: column;
+
+}
+
+#preferences-button-container {
+  display: flex;
+  flex-direction: row;
+  margin-right: 0;
+  margin-left: auto;
+  margin-top: 8%;
+  width: max-content;
+  button {
+    margin-left: 2rem;
+    margin-right: 0rem;
+  }
+}

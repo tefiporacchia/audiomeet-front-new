@@ -1,0 +1,120 @@
+html, body {
+  height:100%;
+}
+
+#container {
+  display: flex;
+  padding: 0;
+  margin: 0;
+  background-color:#F6540C;
+  width: 100vw;
+  height: 100vh;
+}
+
+#top-bar{
+  text-align-last: end;
+}
+
+#left-container {
+  position: fixed;
+  width: 50%;
+  height: 100vh;
+  background-color: #E43D44;
+  overflow: scroll;
+}
+
+#right-container {
+  position: fixed;
+  transform: translate(100%, 0);
+  width: 50%;
+  height: 100vh;
+  background-color: #FFF;
+  overflow: scroll;
+}
+
+#data-container {
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5%;
+}
+
+#header {
+  font-weight: bold;
+}
+
+#centered-container {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 25%;
+}
+
+#input-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  input {
+    height: 4rem;
+    margin: 1rem 0 1rem 0;
+    padding-left: 1rem;
+    font-size: 15px;
+    color: #A5A5A5;
+  }
+}
+
+#sign-in-button-container {
+  display: flex;
+  flex-direction: row;
+  margin-right: 0;
+  margin-left: auto;
+  margin-top: 46%;
+  width: max-content;
+  button {
+    margin-left: 2rem;
+    margin-right: 0rem;
+  }
+}
+
+#sign-up-button-container {
+  display: flex;
+  flex-direction: row;
+  margin-right: 0;
+  margin-left: auto;
+  margin-top: 24.7%;
+  width: max-content;
+  button {
+    margin-left: 2rem;
+    margin-right: 0rem;
+  }
+}
+
+.MuiAlert-root {
+  display: flex;
+  padding: 6px 16px;
+  margin-top: 0.2rem;
+  font-size: 0.875rem;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 400;
+  line-height: 1.43;
+  border-radius: 4px;
+  letter-spacing: 0.01071em;
+  background-color: transparent;
+}
+
+.error {
+  border: solid 1px red;
+}
+
+.audiomeet-button {
+  width: 250px;
+  height: 51px;
+  color: white;
+  background: #0F5054;
+  border: 1px solid #0F5054;
+  border-radius: 25.5px;
+}
+
+#logo-container {
+  margin-top:85%;
+  margin-left:10%;
+}

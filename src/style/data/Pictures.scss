@@ -1,0 +1,80 @@
+.Pictures {
+  font-family: sans-serif;
+  /* text-align: center; */
+  background-color: #E43D44;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  overflow: scroll;
+}
+.image-item {
+  display: flex;
+  margin: 10px 0;
+}
+.image-item__btn-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top:2px;
+
+}
+.xbutton {
+  height: 20px;
+  width:20px;
+  border-width: 0px;
+  background-color: black;
+  border-color: #E43D44;
+  color:white;
+  border-radius: 20%;
+}
+.updateButton{
+  height: 20px;
+  width:20px;
+  border-width: 0px;
+  background-color: black;
+  border-color: #E43D44;
+  color:white;
+  border-radius: 20%;
+  margin-bottom: 3px;
+}
+
+.chooseordropbutton{
+  height: 40px;
+  border-width: 0px;
+  background-color: black;
+  border-color: #E43D44;
+  color:white;
+  border-radius: 5%;
+}
+
+.upload__image-wrapper{
+  display: flex;
+  align-items: center;
+  flex-direction: column-reverse;
+  background: #E43D44;
+  border-color: white;
+  border-width:2px;
+  min-height:40%;
+  min-width:40%;
+  max-height:40%;
+  max-width:40%;
+  position:absolute;
+}
+
+button:hover {
+  background-color: #EB7923; /* Green */
+  color: white;
+}
+
+.allimages{
+  margin: 2px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 90%;
+  height: 100%;
+  justify-content: center;
+}
