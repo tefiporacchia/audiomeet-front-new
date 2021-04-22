@@ -1,0 +1,19 @@
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ffe6e6;
+  background-color: #fff0f0;
+  box-shadow: 0 10px 50px 0 rgba(0, 0, 0, 0.119);
+
+}
+
+.header__logo {
+  height: 40px;
+  object-fit: contain;
+}
+
+.header__icon {
+  padding: 20px;
+}
