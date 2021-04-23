@@ -122,32 +122,15 @@ const Preferences = () => {
 
 
     const handleChangeYesSmokes = event => {
+        console.log("se toco")
         setYesSmokes(event.target.value)
     }
 
-    const handleChangeNoSmokes = event => {
-        setNoSmokes(event.target.value)
-    }
+    useEffect(()=>{
+        console.log("cambio smokes")
+    },[yesSmokes,noSmokes])
 
-    const handleChangeYesDrinks = event => {
-        setYesDrinks(event.target.value)
-    }
 
-    const handleChangeNoDrinks = event => {
-        setNoDrinks(event.target.value)
-    }
-
-    const handleChangeSerious = event => {
-        setSerious(event.target.value)
-    }
-
-    const handleChangeNotSerious = event => {
-        setNotSerious(event.target.value)
-    }
-
-    const handleChangeFriendship = event => {
-        setFriendship(event.target.value)
-    }
 
 
     const submitData = event => {
@@ -202,15 +185,13 @@ const Preferences = () => {
 
                                             <div className={'checkboxes-pref'}>
                                                 <FormControlLabel
-                                                    control={<GreenCheckbox checked={check.yesSmokes} onChange={handleChangeCheck} name="yesSmokes" />}
+                                                    control={<GreenCheckbox checked={yesSmokes} onChange={()=>setYesSmokes(!yesSmokes)} name="yesSmokes" />}
                                                     label="Si"
-                                                    onChange={(event) => handleChangeYesSmokes(event)}
 
                                                 />
                                                 <FormControlLabel
-                                                    control={<GreenCheckbox checked={check.noSmokes} onChange={handleChangeCheck} name="noSmokes" />}
+                                                    control={<GreenCheckbox checked={noSmokes} onChange={()=>setNoSmokes(!noSmokes)} name="noSmokes" />}
                                                     label="No"
-                                                    onChange={(event) => handleChangeNoSmokes(event)}
                                                 />
                                             </div>
                                         </div>
@@ -219,15 +200,14 @@ const Preferences = () => {
 
                                         <div className={'checkboxes-pref'}>
                                             <FormControlLabel
-                                                control={<GreenCheckbox checked={check.yesAlcohol} onChange={handleChangeCheck} name="yesAlcohol" />}
+                                                control={<GreenCheckbox checked={yesDrinks} onChange={()=>setYesDrinks(!yesDrinks)} name="yesDrinks" />}
                                                 label="Si"
-                                                onChange={(event) => handleChangeYesDrinks(event)}
+
 
                                             />
                                             <FormControlLabel
-                                                control={<GreenCheckbox checked={check.noAlcohol} onChange={handleChangeCheck} name="noAlcohol" />}
+                                                control={<GreenCheckbox checked={noDrinks} onChange={()=>setNoDrinks(!noDrinks)} name="noDrinks" />}
                                                 label="No"
-                                                onChange={(event) => handleChangeNoDrinks(event)}
 
                                             />
                                         </div>
@@ -236,21 +216,19 @@ const Preferences = () => {
                                         <span>Busco: (chequear todas las que apliquen)</span>
                                         <div className={'checkboxes-pref'}>
                                             <FormControlLabel
-                                                control={<GreenCheckbox checked={check.serious} onChange={handleChangeCheck} name="serious" />}
+                                                control={<GreenCheckbox checked={serious} onChange={()=>setSerious(!serious)} name="serious" />}
                                                 label="Algo serio"
-                                                onChange={(event) => handleChangeSerious(event)}
+
 
                                             />
                                             <FormControlLabel
-                                                control={<GreenCheckbox checked={check.notSerious} onChange={handleChangeCheck} name="notSerious" />}
+                                                control={<GreenCheckbox checked={notSerious} onChange={()=>setNotSerious(!notSerious)} name="notSerious" />}
                                                 label="Algo no muy serio"
-                                                onChange={(event) => handleChangeNotSerious(event)}
 
                                             />
                                             <FormControlLabel
-                                                control={<GreenCheckbox checked={check.friendship} onChange={handleChangeCheck} name="friendship" />}
+                                                control={<GreenCheckbox checked={friendship} onChange={()=>setFriendship(!friendship)} name="friendship" />}
                                                 label="Amistad"
-                                                onChange={(event) => handleChangeFriendship(event)}
 
                                             />
                                         </div>
