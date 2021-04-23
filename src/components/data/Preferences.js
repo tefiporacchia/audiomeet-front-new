@@ -1,5 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Input, InputGroup, Button} from 'reactstrap';
+import firebaseApp from '../../firebase'
+import { auth } from "../../firebase"
 
 import {isValidPassword} from "../../utils/signUpUtils";
 import {connect} from 'react-redux'
@@ -72,16 +74,19 @@ function valuetext(value) {
 }
 
 const Preferences = () => {
+
+    const database = firebaseApp.firestore();
+
     const [value, setValue] = React.useState([20, 37]);
 
     const [check, setCheck] = React.useState({
-        yesSmokes: false,
-        noSmokes: false,
-        yesAlcohol: false,
-        noAlcohol: false,
-        serious: false,
-        notSerious: false,
-        friendship: false,
+        yesSmokes: true,
+        noSmokes: true,
+        yesAlcohol: true,
+        noAlcohol: true,
+        serious: true,
+        notSerious: true,
+        friendship: true,
     });
 
     const handleChangeCheck = (event) => {
@@ -106,18 +111,69 @@ const Preferences = () => {
     };
 
 
-    const [name, setName] = useState("");
-    const [bday, setBday] = useState("");
-    const [loc, setLoc] = useState("");
-    const [smokes, setSmokes] = useState(false);
-    const [drinks, setDrinks] = useState(false);
-    const [gender, setGender] = useState("");
-    const [description, setDescription] = useState("");
 
-    const handleChangeName = event => {
-        setName(event.target.value)
+    const [yesSmokes, setYesSmokes] = useState(false);
+    const [noSmokes, setNoSmokes] = useState(false);
+    const [yesDrinks, setYesDrinks] = useState(false);
+    const [noDrinks, setNoDrinks] = useState(false);
+    const [serious, setSerious] = useState(false);
+    const [notSerious, setNotSerious] = useState(false);
+    const [friendship, setFriendship] = useState(false);
+
+
+    const handleChangeYesSmokes = event => {
+        setYesSmokes(event.target.value)
+    }
+
+    const handleChangeNoSmokes = event => {
+        setNoSmokes(event.target.value)
+    }
+
+    const handleChangeYesDrinks = event => {
+        setYesDrinks(event.target.value)
+    }
+
+    const handleChangeNoDrinks = event => {
+        setNoDrinks(event.target.value)
+    }
+
+    const handleChangeSerious = event => {
+        setSerious(event.target.value)
+    }
+
+    const handleChangeNotSerious = event => {
+        setNotSerious(event.target.value)
+    }
+
+    const handleChangeFriendship = event => {
+        setFriendship(event.target.value)
+    }
+
+
+    const submitData = event => {
+
+        const curUser = auth.currentUser;
+        database.collection("userPreferences").doc(curUser.email).set({
+            yesSmokes: yesSmokes,
+            noSmokes: noSmokes,
+            yesDrinks: yesDrinks,
+            noDrinks: noDrinks,
+            serious: serious,
+            notSerious: notSerious,
+            friendship: friendship,
+            olderThan: value[0],
+            youngerThn: value[1]
+
+        })
+            .then(() => {
+                console.log("Document successfully written!");
+            })
+            .catch((error) => {
+                console.error("Error writing document: ", error);
+            });
 
     }
+
     const classes = useStyles();
     const classes2 = useStyles2();
 
@@ -148,10 +204,13 @@ const Preferences = () => {
                                                 <FormControlLabel
                                                     control={<GreenCheckbox checked={check.yesSmokes} onChange={handleChangeCheck} name="yesSmokes" />}
                                                     label="Si"
+                                                    onChange={(event) => handleChangeYesSmokes(event)}
+
                                                 />
                                                 <FormControlLabel
                                                     control={<GreenCheckbox checked={check.noSmokes} onChange={handleChangeCheck} name="noSmokes" />}
                                                     label="No"
+                                                    onChange={(event) => handleChangeNoSmokes(event)}
                                                 />
                                             </div>
                                         </div>
@@ -162,10 +221,14 @@ const Preferences = () => {
                                             <FormControlLabel
                                                 control={<GreenCheckbox checked={check.yesAlcohol} onChange={handleChangeCheck} name="yesAlcohol" />}
                                                 label="Si"
+                                                onChange={(event) => handleChangeYesDrinks(event)}
+
                                             />
                                             <FormControlLabel
                                                 control={<GreenCheckbox checked={check.noAlcohol} onChange={handleChangeCheck} name="noAlcohol" />}
                                                 label="No"
+                                                onChange={(event) => handleChangeNoDrinks(event)}
+
                                             />
                                         </div>
                                     </div>
@@ -175,14 +238,20 @@ const Preferences = () => {
                                             <FormControlLabel
                                                 control={<GreenCheckbox checked={check.serious} onChange={handleChangeCheck} name="serious" />}
                                                 label="Algo serio"
+                                                onChange={(event) => handleChangeSerious(event)}
+
                                             />
                                             <FormControlLabel
                                                 control={<GreenCheckbox checked={check.notSerious} onChange={handleChangeCheck} name="notSerious" />}
                                                 label="Algo no muy serio"
+                                                onChange={(event) => handleChangeNotSerious(event)}
+
                                             />
                                             <FormControlLabel
                                                 control={<GreenCheckbox checked={check.friendship} onChange={handleChangeCheck} name="friendship" />}
                                                 label="Amistad"
+                                                onChange={(event) => handleChangeFriendship(event)}
+
                                             />
                                         </div>
                                     </div>
@@ -205,7 +274,7 @@ const Preferences = () => {
                             </InputGroup>
                         </div>
                         <div id={'preferences-button-container'}>
-                            <button type={'button'} className={'audiomeet-button'} >
+                            <button type={'button'} className={'audiomeet-button'} onClick={submitData}>
                                 {'SIGUIENTE >'}
                             </button>
                         </div>

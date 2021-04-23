@@ -1,5 +1,9 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Input, InputGroup, Button} from 'reactstrap';
+import firebaseApp from '../../firebase'
+import { auth } from "../../firebase"
+
+
 
 import {isValidPassword} from "../../utils/signUpUtils";
 import {connect} from 'react-redux'
@@ -72,6 +76,8 @@ const UserData = () => {
     };
 
 
+    const database = firebaseApp.firestore();
+
 
     const [username, setUsername] = useState("");
     const [bday, setBday] = useState("");
@@ -105,6 +111,29 @@ const UserData = () => {
         setDescription(event.target.value)
 
     };
+
+
+
+    const submitData = event => {
+
+        const curUser = auth.currentUser;
+        database.collection("userData").doc(curUser.email).set({
+            username: username,
+            bday: bday,
+            smokes: smokes,
+            drinks: drinks,
+            gender: gender,
+            description: description
+
+        })
+            .then(() => {
+                console.log("Document successfully written!");
+            })
+            .catch((error) => {
+                console.error("Error writing document: ", error);
+            });
+
+    }
 
 
     const classes = useStyles();
@@ -202,7 +231,7 @@ const UserData = () => {
                             </InputGroup>
                         </div>
                         <div id={'user-data-button-container'}>
-                            <button type={'button'} className={'audiomeet-button'} >
+                            <button type={'button'} className={'audiomeet-button'} onClick={submitData}>
                                 {'SIGUIENTE'}
                             </button>
                         </div>

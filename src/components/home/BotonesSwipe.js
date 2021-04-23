@@ -12,24 +12,24 @@ const BotonesSwipe = () => {
     return (
         <div className="botonesSwipe">
             <IconButton className="botonesSwipe__replay">
-                <ReplayIcon font="large"/>
+                <ReplayIcon style={{ fontSize: 40 }}/>
             </IconButton>
 
             <IconButton className="botonesSwipe__close">
-                <CloseIcon font="large"/>
+                <CloseIcon style={{ fontSize: 40 }}/>
             </IconButton>
 
-            <IconButton className="botonesSwipe__star">
-                <StarIcon font="large"/>
-            </IconButton>
+            {/*<IconButton className="botonesSwipe__star">
+                <StarIcon style={{ fontSize: 40 }}/>
+            </IconButton>*/}
 
             <IconButton className="botonesSwipe__fav">
-                <FavoriteIcon font="large"/>
+                <FavoriteIcon style={{ fontSize: 40 }}/>
             </IconButton>
 
-            <IconButton className="botonesSwipe__flash">
-                <FlashOnIcon font="large"/>
-            </IconButton>
+            {/*<IconButton className="botonesSwipe__flash">
+                <FlashOnIcon style={{ fontSize: 40 }}/>
+            </IconButton>*/}
 
 
         </div>

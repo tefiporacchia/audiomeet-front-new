@@ -1,10 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import '../../style/home/TarjetasTinder.scss';
 import TarjetaPersona from 'react-tinder-card'
-import database from '../../firebase'
+import firebaseApp from '../../firebase'
 const TarjetasTinder = () => {
 
     const [persona,setPersona] = useState([]);
+    const database = firebaseApp.firestore();
 
     useEffect(() => {
 
