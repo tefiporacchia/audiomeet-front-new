@@ -132,7 +132,7 @@ const Pictures = () => {
                             <button className="chooseordropbutton" onClick={onImageRemoveAll}>Remove all</button>
 
                             <button type={'button'} className={'audiomeet-button'} onClick={submitData}>
-                                {'SIGUIENTE'}
+                                {loading ? <div className="loader"/>: 'SIGUIENTE'}
                             </button>
                         </div>
 
