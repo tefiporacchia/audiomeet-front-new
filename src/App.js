@@ -27,18 +27,18 @@ function App() {
             <Switch>
                 <Route exact path={'/register'} component={Register}/> //si el path es ese, cargame ese componente
                 <Route exact path={'/login'} component={Login}/>
-                <Route exact path={'/preferences'} component={Preferences}/>
-                <Route exact path={'/userdata'} component={UserData}/>
-                <Route exact path={'/pictures'} component={Pictures}/>
+                <PrivateRoute exact path={'/preferences'} component={Preferences}/>
+                <PrivateRoute exact path={'/userdata'} component={UserData}/>
+                <PrivateRoute exact path={'/pictures'} component={Pictures}/>
                 <Route path="/signup" component={SignUp} />
                 <Route path="/signin" component={SignIn} />
                 <PrivateRoute exact path="/dashboard" component={Dashboard} />
-                <Route path="/">
+                <PrivateRoute path="/">
                     {/*<Header />
                     <TarjetasTinder />
                     <BotonesSwipe />*/}
                     <Navigation/>
-                </Route>
+                </PrivateRoute>
             </Switch>
             </AuthProvider>
         </Router>

@@ -9,7 +9,7 @@ import {connect} from 'react-redux'
 import '../../style/auth/Auth.scss';
 import { makeStyles } from '@material-ui/core/styles';
 import Alert from '@material-ui/lab/Alert';
-import {Redirect, useLocation} from 'react-router-dom';
+import {Redirect, useHistory, useLocation} from 'react-router-dom';
 import TextField from '@material-ui/core/TextField';
 import { red,green } from '@material-ui/core/colors';
 import FormGroup from '@material-ui/core/FormGroup';
@@ -119,6 +119,7 @@ const Preferences = () => {
     const [serious, setSerious] = useState(false);
     const [notSerious, setNotSerious] = useState(false);
     const [friendship, setFriendship] = useState(false);
+    const history = useHistory()
 
 
     const handleChangeYesSmokes = event => {
@@ -167,6 +168,7 @@ const Preferences = () => {
         })
             .then(() => {
                 console.log("Document successfully written!");
+                history.push("/");
             })
             .catch((error) => {
                 console.error("Error writing document: ", error);
@@ -182,7 +184,7 @@ const Preferences = () => {
         <div id={'container'}>
             <div id={'left-container'}>
                 <div id={'logo-container'}>
-                    <img src={'/assets/audioMeetLogoBlanco.png'} id={'brand-logo'} alt={'brand-logo'} height={'150'} width={'180'}/>
+                    <img src={'/assets/vector-creator.png'} id={'brand-logo'} alt={'brand-logo'} height={'350'} width={'350'}/>
                 </div>
             </div>
             <div id={'right-container'}>

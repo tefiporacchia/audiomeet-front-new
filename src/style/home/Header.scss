@@ -12,8 +12,15 @@
 .header__logo {
   height: 40px;
   object-fit: contain;
+
 }
 
 .header__icon {
+  padding: 20px;
+
+}
+
+.botonHome{
+  color: grey !important;
   padding: 20px;
 }

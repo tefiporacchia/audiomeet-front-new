@@ -11,7 +11,7 @@ import {connect} from 'react-redux'
 import '../../style/auth/Auth.scss';
 import { makeStyles } from '@material-ui/core/styles';
 import Alert from '@material-ui/lab/Alert';
-import {Redirect, useLocation} from 'react-router-dom';
+import {Redirect, useHistory, useLocation} from 'react-router-dom';
 import TextField from '@material-ui/core/TextField';
 import { red,green } from '@material-ui/core/colors';
 import FormGroup from '@material-ui/core/FormGroup';
@@ -85,6 +85,7 @@ const UserData = () => {
     const [drinks, setDrinks] = useState(false);
     const [gender, setGender] = useState(false);
     const [description, setDescription] = useState("");
+    const history = useHistory()
 
     const handleChangeName = event => {
         setUsername(event.target.value)
@@ -128,6 +129,7 @@ const UserData = () => {
         })
             .then(() => {
                 console.log("Document successfully written!");
+                history.push("/preferences");
             })
             .catch((error) => {
                 console.error("Error writing document: ", error);
@@ -143,7 +145,7 @@ const UserData = () => {
         <div id={'container'}>
             <div id={'left-container'}>
                 <div id={'logo-container'}>
-                    <img src={'/assets/audioMeetLogoBlanco.png'} id={'brand-logo'} alt={'brand-logo'} height={'150'} width={'180'}/>
+                    <img src={'/assets/couple.png'} id={'brand-logo'} alt={'brand-logo'} height={'350'} width={'350'}/>
                 </div>
             </div>
             <div id={'right-container'}>
