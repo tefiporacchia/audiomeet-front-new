@@ -7,16 +7,20 @@ const TarjetasTinder = () => {
 
     const [persona,setPersona] = useState([]);
 
-    const [wantsFriendship, setWantsFriendship] = useState(false);
     const [noDrinksPref,setNoDrinksPref] = useState(false);
     const [yesDrinksPref,setYesDrinksPref] = useState(false);
     const [noSmokesPref,setNoSmokesPref] = useState(false);
     const [yesSmokesPref,setYesSmokesPref] = useState(false);
     const [notSerious, setNotSerious] = useState(false);
     const [yesSerious, setYesSerious] = useState(false);
+    const [wantsFriendship, setWantsFriendship] = useState(false);
     const [olderThan,setOlderThan] = useState(0);
     const [youngerThan,setYoungerThan] = useState(100);
     const [cumpleCondicioness, setCumpleCondiciones]= useState(false);
+    //data of user to check
+    const [wantsNotSerious, setWantsNotSerious] = useState(false);
+    const [wantsSerious, setWantsSerious] = useState(false);
+    const [friendship, setFriendship] = useState(false);
 
 
     const database = firebaseApp.firestore();
@@ -57,14 +61,26 @@ const TarjetasTinder = () => {
         const userDataCollection = database.collection("userData")
 
         function cumpleCondiciones(docId){
+            console.log(cumpleCondicioness)
+            setPrefs(docId);
             const documento = userDataCollection.doc(docId);
             documento.get().then((doc) => {
                 if (doc.exists) {
-                    if((doc.data().drinks==yesDrinksPref||doc.data().drinks!=noDrinksPref)
-                        &&(doc.data().smokes==yesSmokesPref||doc.data().smokes!=noSmokesPref)
-                        &&(get_age(doc.data().bday)>=olderThan)&&(get_age(doc.data().bday)<=youngerThan)){
+                    if((doc.data().drinks===yesDrinksPref||doc.data().drinks!==noDrinksPref)
+                        &&(doc.data().smokes===yesSmokesPref||doc.data().smokes!==noSmokesPref)
+                        &&(get_age(doc.data().bday)>=olderThan)&&(get_age(doc.data().bday)<=youngerThan)
+                        &&(yesSerious===wantsSerious||notSerious===wantsNotSerious||wantsFriendship===friendship)
+                        &&(docId!==curUser.email)
+                    ){
                         setCumpleCondiciones(true)
                         console.log(get_age(doc.data().bday) + "holaa")
+                        console.log("cumple?"+docId+cumpleCondicioness)
+                        console.log(doc.data().drinks===yesDrinksPref)
+                        console.log(doc.data().drinks!==noDrinksPref)
+                        console.log(doc.data().smokes===yesSmokesPref)
+                        console.log(doc.data().smokes!==noSmokesPref)
+                        console.log(yesSerious===wantsSerious||notSerious===wantsNotSerious||wantsFriendship===friendship)
+
                     }
 
                 } else {
@@ -78,15 +94,34 @@ const TarjetasTinder = () => {
             return cumpleCondicioness;
         }
 
+        function setPrefs(userId){
+            const ref = database.collection("userPreferences").doc(userId);
+            ref.get().then((doc) => {
+                if (doc.exists) {
+                    setFriendship(doc.data().friendship);
+                    setWantsNotSerious(doc.data().notSerious);
+                    setWantsSerious(doc.data().serious);
+                    console.log("Sets prefs "+userId+doc.data().friendship+doc.data().notSerious+doc.data().serious);
+
+
+                } else {
+                    // doc.data() will be undefined in this case
+                    console.log("No such document!");
+                }
+            }).catch((error) => {
+                console.log("Error getting document:", error);
+            });
+        }
+
 
         const desuscribirse = database.collection('userImages').onSnapshot(snapshot => (
             setPersona(snapshot.docs.map( doc => cumpleCondiciones(doc.id) && doc.data()))
             //el documento "doc id" en userdata comparte las preferencias del usuario
         ));
 
-        console.log(persona.length); //hay 5
-        console.log(persona.filter( (ob) => ob.nombre.includes("Tefi"))) //para filtrar json
-
+        //console.log("hay"+persona); //hay 5
+        console.log("hay "+persona.length); //hay 5
+       // console.log(persona.filter( (ob) => ob.username.includes("Tefi"))) //para filtrar json
         // const filtro1 = desuscribirse().filter( (auto) => auto.title.includes("Jeep"))
 
         return () => {
@@ -106,10 +141,10 @@ const TarjetasTinder = () => {
                         >
                         <div
                             className="tarjeta"
-                            style={{backgroundImage:`url(${persona.url})`}}
+                            style={{backgroundImage:`url(${persona.userImages})`}}
                         >
-                            <h2>{persona.nombre}</h2>
-                            <h4>{persona.descripcion}</h4>
+                            <h2>{persona.username}</h2>
+                            <h4>{persona.description}</h4>
                         </div>
 
                         </TarjetaPersona>

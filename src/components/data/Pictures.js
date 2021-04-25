@@ -29,6 +29,29 @@ const Pictures = () => {
     const [loading, setLoading] = useState(false);
     const curUser = auth.currentUser;
     const storageRef = storage.ref();
+    const [username, setUsername] = useState("");
+    const [description, setDescription] = useState("");
+
+
+    const docRef = database.collection("userData").doc(curUser.email);
+    docRef.get().then((doc) => {
+        if (doc.exists) {
+            console.log("Document data:", doc.data());
+            setUsername(doc.data().username);
+            setDescription(doc.data().description);
+
+
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+        }
+    }).catch((error) => {
+        console.log("Error getting document:", error);
+    });
+
+
+
+
 
     const submitData = event => {
 
@@ -80,6 +103,8 @@ const Pictures = () => {
         //copy array to database
         database.collection("userImages").doc(curUser.email).set({
             userImages: userImages,
+            username: username,
+            description: description
 
         })
             .then(() => {
@@ -93,15 +118,6 @@ const Pictures = () => {
 
     }
 
-    /**
-    function load()
-    {
-        if(loading===true){
-            document.getElementsByClassName('loader').visibility = 'visible';
-        }else{
-            document.getElementsByClassName('loader').visibility = 'hidden';
-        }
-    }**/
 
     return (
         <div className="Pictures">
