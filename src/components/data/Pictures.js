@@ -4,6 +4,7 @@ import ImageUploading from "react-images-uploading";
 import '../../style/data/Pictures.scss';
 import Preferences from "./Preferences";
 import firebaseApp, {auth} from "../../firebase";
+import {useHistory} from "react-router-dom";
 
 const Pictures = () => {
 
@@ -11,6 +12,7 @@ const Pictures = () => {
     const database = firebaseApp.firestore();
     const [images, setImages] = React.useState([]);
     const maxNumber = 9;
+    const history = useHistory()
 
     const onChange = (imageList, addUpdateIndex) => {
         // data for submit
@@ -35,6 +37,7 @@ const Pictures = () => {
         setTimeout(addToArray,10000)
         setTimeout(addToDatabase,20000)
         //Add images url to database
+        history.push("/");
 
     }
 

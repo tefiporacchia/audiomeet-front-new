@@ -151,7 +151,7 @@ const Preferences = () => {
         })
             .then(() => {
                 console.log("Document successfully written!");
-                history.push("/");
+                history.push("/pictures");
             })
             .catch((error) => {
                 console.error("Error writing document: ", error);
