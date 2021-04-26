@@ -6,22 +6,23 @@ import moment from 'moment';
 const TarjetasTinder = () => {
 
     const [persona,setPersona] = useState([]);
+    //const [dataLoaded,setDataLoaded] = useState([]);
 
-    const [noDrinksPref,setNoDrinksPref] = useState(false);
-    const [yesDrinksPref,setYesDrinksPref] = useState(false);
-    const [noSmokesPref,setNoSmokesPref] = useState(false);
-    const [yesSmokesPref,setYesSmokesPref] = useState(false);
-    const [notSerious, setNotSerious] = useState(false);
-    const [yesSerious, setYesSerious] = useState(false);
-    const [wantsFriendship, setWantsFriendship] = useState(false);
-    const [olderThan,setOlderThan] = useState(0);
-    const [youngerThan,setYoungerThan] = useState(100);
-    const [cumpleCondicioness, setCumpleCondiciones]= useState(false);
-    //data of user to check
-    const [wantsNotSerious, setWantsNotSerious] = useState(false);
-    const [wantsSerious, setWantsSerious] = useState(false);
-    const [friendship, setFriendship] = useState(false);
-
+    const [noDrinksPref,setNoDrinksPref] = useState(null);
+    const [yesDrinksPref,setYesDrinksPref] = useState(null);
+    const [noSmokesPref,setNoSmokesPref] = useState(null);
+    const [yesSmokesPref,setYesSmokesPref] = useState(null);
+    const [notSerious, setNotSerious] = useState(null);
+    const [yesSerious, setYesSerious] = useState(null);
+    const [wantsFriendship, setWantsFriendship] = useState(null);
+    const [olderThan,setOlderThan] = useState(null);
+    const [youngerThan,setYoungerThan] = useState(null);
+    const [cumpleCondicioness, setCumpleCondiciones]= useState(null);
+    /**data of user to check
+    const [wantsNotSerious, setWantsNotSerious] = useState();
+    const [wantsSerious, setWantsSerious] = useState();
+    const [friendship, setFriendship] = useState();
+**/
 
     const database = firebaseApp.firestore();
     const curUser = auth.currentUser;
@@ -32,23 +33,69 @@ const TarjetasTinder = () => {
         const years_elapsed = (new Date() - new Date(date_array[0],date_array[1],date_array[2]))/(MILLISECONDS_IN_A_YEAR);
         return Math.trunc(years_elapsed); }
 
+
+
     useEffect(() => {
-
-        console.log(get_age('1982-09-20'));
-
         const docRef = database.collection("userPreferences").doc(curUser.email);
         docRef.get().then((doc) => {
             if (doc.exists) {
+                console.log("Setting data")
                 console.log("Document data:", doc.data());
                 setWantsFriendship(doc.data().friendship);
                 setYesDrinksPref(doc.data().yesDrinks);
                 setNoDrinksPref(doc.data().noDrinks);
                 setNoSmokesPref(doc.data().noSmokes);
                 setYesSmokesPref(doc.data().yesSmokes);
-                setYesSerious(doc.data().yesSerious);
+                setYesSerious(doc.data().serious);
                 setNotSerious(doc.data().notSerious);
                 setOlderThan(doc.data().olderThan);
                 setYoungerThan(doc.data().youngerThn);
+
+            } else {
+                // doc.data() will be undefined in this case
+                console.log("no such document!");
+            }
+        }).catch((error) => {
+            console.log("Error getting document:", error);
+        });
+
+        //console.log("HOLAAAA"+ olderThan);
+
+    }, [])
+
+
+
+    const userDataCollection = database.collection("userData")
+
+
+
+
+    function cumpleCondiciones(docId){
+
+
+        let cumple=false;
+        //console.log(cumpleCondicioness)
+        const documento = userDataCollection.doc(docId);
+        documento.get().then((doc) => {
+            if (doc.exists) {
+
+                console.log(doc.data())
+                if((doc.data().drinks===yesDrinksPref||doc.data().drinks!==noDrinksPref)
+                    &&(doc.data().smokes===yesSmokesPref||doc.data().smokes!==noSmokesPref)
+                    &&(get_age(doc.data().bday)>=olderThan)&&(get_age(doc.data().bday)<=youngerThan)
+                    &&(docId!==curUser.email)
+                ){
+
+                    return true;
+                    //console.log(cumple)
+                    console.log(get_age(doc.data().bday) + "hola")
+                    console.log(doc.data().drinks===yesDrinksPref)
+                    console.log(doc.data().drinks!==noDrinksPref)
+                    console.log(doc.data().smokes===yesSmokesPref)
+                    console.log(doc.data().smokes!==noSmokesPref)
+                    //console.log(yesSerious===wantsSerious||notSerious===wantsNotSerious||wantsFriendship===friendship)
+
+                }
 
             } else {
                 // doc.data() will be undefined in this case
@@ -58,82 +105,67 @@ const TarjetasTinder = () => {
             console.log("Error getting document:", error);
         });
 
-        const userDataCollection = database.collection("userData")
+        const ref = database.collection("userPreferences").doc(docId);
+        ref.get().then((doc) => {
 
-        function cumpleCondiciones(docId){
-            console.log(cumpleCondicioness)
-            setPrefs(docId);
-            const documento = userDataCollection.doc(docId);
-            documento.get().then((doc) => {
-                if (doc.exists) {
-                    if((doc.data().drinks===yesDrinksPref||doc.data().drinks!==noDrinksPref)
-                        &&(doc.data().smokes===yesSmokesPref||doc.data().smokes!==noSmokesPref)
-                        &&(get_age(doc.data().bday)>=olderThan)&&(get_age(doc.data().bday)<=youngerThan)
-                        &&(yesSerious===wantsSerious||notSerious===wantsNotSerious||wantsFriendship===friendship)
-                        &&(docId!==curUser.email)
-                    ){
-                        setCumpleCondiciones(true)
-                        console.log(get_age(doc.data().bday) + "holaa")
-                        console.log("cumple?"+docId+cumpleCondicioness)
-                        console.log(doc.data().drinks===yesDrinksPref)
-                        console.log(doc.data().drinks!==noDrinksPref)
-                        console.log(doc.data().smokes===yesSmokesPref)
-                        console.log(doc.data().smokes!==noSmokesPref)
-                        console.log(yesSerious===wantsSerious||notSerious===wantsNotSerious||wantsFriendship===friendship)
+            if (doc.exists) {
+                console.log(doc.data())
 
-                    }
+                if(doc.data().serious===yesSerious||doc.data().notSerious===notSerious||doc.data().friendship===wantsFriendship){
+                    console.log(cumple)
 
-                } else {
-                    // doc.data() will be undefined in this case
-                    console.log("No such document!");
+                }else{
+                    cumple=false;
                 }
-            }).catch((error) => {
-                console.log("Error getting document:", error);
-            });
+            } else {
+                // doc.data() will be undefined in this case
+                console.log("No such document!");
+            }
+        }).catch((error) => {
+            console.log("Error getting document:", error);
+        });
 
-            return cumpleCondicioness;
+        console.log("CUMPLE CONDICION:",cumple)
+        return cumple;
+
+    }
+
+
+
+
+    useEffect(()=>{
+
+        //if not null
+        console.log(yesSmokesPref )//+ yesDrinksPref + yesSmokesPref + notSerious + noDrinksPref + noSmokesPref + olderThan + youngerThan + wantsFriendship)
+        if(yesSerious!==null && yesDrinksPref!==null && yesSmokesPref!==null && notSerious!==null && noDrinksPref!==null && noSmokesPref!==null && olderThan!==null && youngerThan!==null && wantsFriendship!==null ) {
+           console.log("VALOR DE LA VARIABLE",youngerThan);
+            const desuscribirse = database.collection('userImages').onSnapshot(snapshot => (
+                setPersona(snapshot.docs.map(doc => cumpleCondiciones(doc.id) && doc.data() ))
+                //el documento "doc id" en userdata comparte las preferencias del usuario
+            ));
+
+            return () => {
+                desuscribirse();
+            }
         }
-
-        function setPrefs(userId){
-            const ref = database.collection("userPreferences").doc(userId);
-            ref.get().then((doc) => {
-                if (doc.exists) {
-                    setFriendship(doc.data().friendship);
-                    setWantsNotSerious(doc.data().notSerious);
-                    setWantsSerious(doc.data().serious);
-                    console.log("Sets prefs "+userId+doc.data().friendship+doc.data().notSerious+doc.data().serious);
-
-
-                } else {
-                    // doc.data() will be undefined in this case
-                    console.log("No such document!");
-                }
-            }).catch((error) => {
-                console.log("Error getting document:", error);
-            });
-        }
-
-
-        const desuscribirse = database.collection('userImages').onSnapshot(snapshot => (
-            setPersona(snapshot.docs.map( doc => cumpleCondiciones(doc.id) && doc.data()))
-            //el documento "doc id" en userdata comparte las preferencias del usuario
-        ));
-
         //console.log("hay"+persona); //hay 5
         console.log("hay "+persona.length); //hay 5
-       // console.log(persona.filter( (ob) => ob.username.includes("Tefi"))) //para filtrar json
+        // console.log(persona.filter( (ob) => ob.username.includes("Tefi"))) //para filtrar json
         // const filtro1 = desuscribirse().filter( (auto) => auto.title.includes("Jeep"))
 
-        return () => {
-            desuscribirse();
-        }
 
-    }, [])
+
+    },[yesSerious,yesDrinksPref,yesSmokesPref,notSerious,noDrinksPref,noSmokesPref,olderThan,youngerThan,wantsFriendship])
+
+    useEffect(()=>{
+        console.log("p",persona)
+
+    },[persona])
 
     return (
         <div className="tarjetasTinder">
             <div className="tarjetasTinder__contenedor">
-                {persona.map(persona => (
+                { persona.length>0 && persona.map(persona => (
                         <TarjetaPersona
                         className="swipe"
                         key={persona.name}
