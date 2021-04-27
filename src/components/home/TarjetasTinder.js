@@ -102,7 +102,7 @@ const TarjetasTinder = () => {
                 console.log("No such document!");
             }
         }).catch((error) => {
-            console.log("Error getting document:", error);
+            console.log("Error getting document", error);
         });
 
         const ref = database.collection("userPreferences").doc(docId);
