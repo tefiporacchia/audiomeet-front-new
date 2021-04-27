@@ -86,8 +86,8 @@ const TarjetasTinder = () => {
                     &&(docId!==curUser.email)
                 ){
 
-                    return true;
-                    //console.log(cumple)
+                    cumple=true;
+                    console.log("------------------")
                     console.log(get_age(doc.data().bday) + "hola")
                     console.log(doc.data().drinks===yesDrinksPref)
                     console.log(doc.data().drinks!==noDrinksPref)
@@ -112,7 +112,9 @@ const TarjetasTinder = () => {
                 console.log(doc.data())
 
                 if(doc.data().serious===yesSerious||doc.data().notSerious===notSerious||doc.data().friendship===wantsFriendship){
+                    cumple=true;
                     console.log(cumple)
+
 
                 }else{
                     cumple=false;
@@ -173,10 +175,12 @@ const TarjetasTinder = () => {
                         >
                         <div
                             className="tarjeta"
-                            style={{backgroundImage:`url(${persona.userImages})`}}
+                            // style={{backgroundImage:`url(${persona.userImages})`}}
+                            style={{backgroundImage:'/assets/AudioMeetPalette5.png'}}
                         >
-                            <h2>{persona.username}</h2>
-                            <h4>{persona.description}</h4>
+                            {/*<h2>{persona.username}</h2>
+                            <h4>{persona.description}</h4>*/}
+                            <h2>holaa</h2>
                         </div>
 
                         </TarjetaPersona>
