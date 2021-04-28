@@ -87,6 +87,8 @@ const Preferences = () => {
         serious: true,
         notSerious: true,
         friendship: true,
+        wantsMale: true,
+        wantsFemale: true,
     });
 
     const handleChangeCheck = (event) => {
@@ -119,6 +121,9 @@ const Preferences = () => {
     const [serious, setSerious] = useState(false);
     const [notSerious, setNotSerious] = useState(false);
     const [friendship, setFriendship] = useState(false);
+    const [wantsMale,setWantsMale]= useState(false);
+    const [wantsFemale,setWantsFemale]= useState(false);
+
     const history = useHistory()
 
 
@@ -146,7 +151,9 @@ const Preferences = () => {
             notSerious: notSerious,
             friendship: friendship,
             olderThan: value[0],
-            youngerThn: value[1]
+            youngerThn: value[1],
+            wantsMale: wantsMale,
+            wantsFemale: wantsFemale
 
         })
             .then(() => {
@@ -231,6 +238,23 @@ const Preferences = () => {
                                             <FormControlLabel
                                                 control={<GreenCheckbox checked={friendship} onChange={()=>setFriendship(!friendship)} name="friendship" />}
                                                 label="Amistad"
+
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className={'three-checkboxes'}>
+                                        <span>Busco: (chequear todas las que apliquen)</span>
+                                        <div className={'checkboxes-pref'}>
+                                            <FormControlLabel
+                                                control={<GreenCheckbox checked={wantsMale} onChange={()=>setWantsMale(!wantsMale)} name="wantsMale" />}
+                                                label="Hombres"
+
+
+                                            />
+                                            <FormControlLabel
+                                                control={<GreenCheckbox checked={wantsFemale} onChange={()=>setWantsFemale(!wantsFemale)} name="wantsFemale" />}
+                                                label="Mujeres"
+
 
                                             />
                                         </div>
