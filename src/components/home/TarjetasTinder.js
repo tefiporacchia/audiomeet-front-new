@@ -126,7 +126,7 @@ const TarjetasTinder = () => {
                 if((data.drinks==yesDrinksPref||data.drinks!=noDrinksPref)
                     &&(data.smokes==yesSmokesPref||data.smokes!=noSmokesPref)
                     &&(get_age(data.bday)>=olderThan)&&(get_age(data.bday)<=youngerThan) && docId!= curUser.email
-                    && (preferences.friendship==wantsFriendship ||preferences.serious==yesSerious || preferences.notSerious == notSerious)
+                    && ((preferences.friendship==wantsFriendship)==true ||(preferences.serious==yesSerious)==true || (preferences.notSerious == notSerious)==true)
                     &&(data.gender!=wantsMale||data.gender==wantsFemale)){
                     cumple = true
                     return 1
