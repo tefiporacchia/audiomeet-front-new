@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import {Card, Button, Alert, Container} from "react-bootstrap"
 import { useAuth } from "../../contexts/AuthContext"
 import { Link, useHistory } from "react-router-dom"
-
+import '../../style/auth/Dashboard.scss';
 
 export default function Dashboard() {
     const [error, setError] = useState("")
@@ -28,10 +28,10 @@ export default function Dashboard() {
                 <div className="w-100" style={{maxWidth: "400px"}}>
                     <Card>
                         <Card.Body>
-                            <h2 className="text-center mb-4">Profile</h2>
+                            <h2 className="text-center mb-4">Profile Data</h2>
                             {error && <Alert variant="danger">{error}</Alert>}
                             <strong>Email:</strong> {currentUser.email}
-                            <Link to="/update-profile" className="btn btn-primary w-100 mt-3">
+                            <Link to="/update-profile" className="btn btn-primary w-100 mt-3 hoverbut" >
                                 Update Profile
                             </Link>
                         </Card.Body>

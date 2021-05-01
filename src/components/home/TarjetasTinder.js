@@ -151,7 +151,9 @@ const TarjetasTinder = () => {
     }
 
     return (
+
         <div className="tarjetasTinder">
+
             <div className="tarjetasTinder__contenedor">
                 {persona.map(persona => (
                     <TarjetaPersona
@@ -178,6 +180,7 @@ const TarjetasTinder = () => {
                 ))}
             </div>
         </div>
+
     )
 }
 

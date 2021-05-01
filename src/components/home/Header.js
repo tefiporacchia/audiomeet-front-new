@@ -6,6 +6,7 @@ import { IconButton } from '@material-ui/core';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import { Link, useHistory } from 'react-router-dom';
 import HomeIcon from '@material-ui/icons/Home';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 
 
@@ -22,18 +23,21 @@ const Header = ({botonRetroceder}) => {
 
             ) : (
                 <Link to="/dashboard">
-                <IconButton className="botonHome">
+                <IconButton className="botonHome" >
                     {/*<PersonIcon className="header__icon" fontSize="large" />*/}
-                    <HomeIcon fontSize="medium" className="header__botonRetroceder" />
+                    <AccountCircleIcon fontSize="large" className="header__botonRetroceder" />
+                    <span className={'home-span'}>Profile</span>
                 </IconButton>
+
                 </Link>
             )}
 
-            <Link to="/">
+            {/*<Link to="/">
                 <img img src={'/assets/audioMeetLogoBlanco.png'}
                      className="header__logo"
                      alt="logo" />
-            </Link>
+            </Link>*/}
+            <span className={'audiomeet-span'}>Audiomeet</span>
 
 
             <Link to="/chats">

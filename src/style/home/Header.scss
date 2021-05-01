@@ -3,8 +3,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #ffe6e6;
-  background-color: #fff0f0;
+  border-bottom: 1px solid #ffffff;
+  background-color: #ffffff;
   box-shadow: 0 10px 50px 0 rgba(0, 0, 0, 0.119);
 
 }
@@ -23,4 +23,19 @@
 .botonHome{
   color: grey !important;
   padding: 20px;
+  border-radius: 20% !important;
+
+}
+
+.home-span{
+  font-size: 1rem;
+  margin-left: 0.4rem;
+}
+
+.audiomeet-span{
+  display: flex;
+  align-self: center;
+  margin-right:3.3rem;
+  font-size: 30px;
+  color: grey;
 }
