@@ -121,6 +121,7 @@ const Pictures = () => {
 
     return (
         <div className="Pictures">
+            <span className={'title'}>Image uploading</span>
             <ImageUploading
                 multiple={true}
                 value={images}
@@ -140,6 +141,7 @@ const Pictures = () => {
                     // write your building UI
                     <div className="upload__image-wrapper">
                         <div className="globalbuttons">
+                            <div>
                             <button className="chooseordropbutton"
                                 style={isDragging ? { color: "red" } : null}
                                 onClick={onImageUpload}
@@ -149,10 +151,11 @@ const Pictures = () => {
                             </button>
                             &nbsp;
                             <button className="chooseordropbutton" onClick={onImageRemoveAll}>Remove all</button>
-
-                            <button type={'button'} className={'audiomeet-button'} onClick={submitData}>
-                                {loading ? <div className="loader"/>: 'SIGUIENTE'}
+                            </div>
+                            <button type={'button'} className={'photos-button'} onClick={submitData}>
+                                {loading ? <div className="loader"/>: <span>Guardar</span>}
                             </button>
+
                         </div>
 
                         <div className="allimages">

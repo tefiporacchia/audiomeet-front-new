@@ -25,6 +25,7 @@ export default function Dashboard() {
             <Container
                 className="d-flex align-items-center justify-content-center"
                 style={{minHeight: "100vh"}}>
+
                 <div className="w-100" style={{maxWidth: "400px"}}>
                     <Card>
                         <Card.Body>
