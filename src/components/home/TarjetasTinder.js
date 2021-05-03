@@ -97,9 +97,10 @@ const TarjetasTinder = () => {
     useEffect(()=> {
         if(log && usersData && usersPreferences){
             const desuscribirse = database.collection('userImages').onSnapshot(snapshot => (
-                setPersona(snapshot.docs.map( doc => cumpleCondiciones(doc.id) && doc.data()).filter(elem => elem))
+                setPersona(snapshot.docs.map( doc => cumpleCondiciones(doc.id) && devolverObjetoAppendeado(doc.data(),doc.id)).filter(elem => elem))
                 //el documento "doc id" en userdata comparte las preferencias del usuario
             ));
+            console.log(persona);
 
             console.log(persona.length); //hay 5
             console.log(persona.filter( (ob) => ob.nombre.includes("Tefi"))) //para filtrar json
@@ -109,13 +110,18 @@ const TarjetasTinder = () => {
             return () => {
                 desuscribirse();
             }
-            console.log(cumpleCondiciones('manumasjoan@gmail.com'))
+
         }
     },[log, usersData, usersPreferences])
 
     useEffect(()=>{
 
     }, [persona])
+
+    function devolverObjetoAppendeado(objeto, id){
+        objeto.id = id;
+        return objeto;
+    }
 
 
     function cumpleCondiciones(docId){
@@ -165,8 +171,8 @@ const TarjetasTinder = () => {
                             className="tarjeta"
                             style={{backgroundImage:`url(${persona.userImages ? persona.userImages[0] : undefined})`}}
                         >
-                            <h2>{persona.username}</h2>
-                            <h4>{persona.description}</h4>
+                            <h2>{usersData.find(x => x.id === persona.id).username}</h2>
+                            <h4>{usersData.find(x => x.id === persona.id).description}</h4>
                         </div>
 
                     </TarjetaPersona>
