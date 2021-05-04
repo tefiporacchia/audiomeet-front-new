@@ -21,12 +21,15 @@ export default function Dashboard() {
     }
 
     return (
-        <>
-            <Container
-                className="d-flex align-items-center justify-content-center"
+        <div style={{display: "flex", flexDirection: "row"}}>
+            <div>
+                <span>this is an img</span>
+            </div>
+            <div
+                className="d-flex w-100 align-items-center justify-content-center"
                 style={{minHeight: "100vh"}}>
 
-                <div className="w-100" style={{maxWidth: "400px"}}>
+                <div className="w-100" style={{maxWidth: "400px", marginRight: "1rem"}}>
                     <Card>
                         <Card.Body>
                             <h2 className="text-center mb-4">Profile Data</h2>
@@ -43,7 +46,7 @@ export default function Dashboard() {
                         </Button>
                     </div>
                 </div>
-            </Container>
-        </>
+            </div>
+        </div>
     )
 }
