@@ -6,16 +6,68 @@ import StarIcon from '@material-ui/icons/Star';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FlashOnIcon from '@material-ui/icons/FlashOn';
 import { IconButton } from '@material-ui/core';
+import firebaseApp, {auth} from "../../firebase";
 
 const BotonesSwipe = () => {
 
+    const database = firebaseApp.firestore();
+    const curUser = auth.currentUser;
+
+    const [usersLiked, setUsersLiked]= useState([]);
+    const [myUsersLiked, setMyUsersLiked]= useState([]);
+    const [lastRejected,setLastRejected]= useState(null);
+
+
+    const desuscribirse3 = database.collection('usersLiked').onSnapshot(snapshot => (
+        setUsersLiked(snapshot.docs.map( doc => {return({id:doc.id, ...doc.data()})}))
+
+        //el documento "doc id" en userdata comparte las preferencias del usuario
+    ));
+
+    useEffect(()=>{
+        usersLiked.map(user => {
+            if(curUser===user.id){
+                setMyUsersLiked(user.myUsersLiked)
+            }
+        })
+
+    }, [usersLiked])
+
+    function reject(rejectedPerson){
+        setLastRejected(rejectedPerson);
+    }
+
+    function undo(){
+        if(lastRejected!=null){
+            like(lastRejected)
+        }
+    }
+
+    function like(likedPersonId){
+
+        setLastRejected(null);
+        myUsersLiked.push(likedPersonId)
+
+        database.collection("usersLiked").doc(curUser.email).set({
+            myUsersLiked: myUsersLiked
+
+        })
+            .then(() => {
+                console.log("Document successfully written!");
+            })
+            .catch((error) => {
+                console.error("Error writing document: ", error);
+            });
+
+    }
+
     return (
         <div className="botonesSwipe">
-            <IconButton className="botonesSwipe__replay">
+            <IconButton className={"botonesSwipe__replay"} >
                 <ReplayIcon style={{ fontSize: 40 }}/>
             </IconButton>
 
-            <IconButton className="botonesSwipe__close">
+            <IconButton className={"botonesSwipe__close"} >
                 <CloseIcon style={{ fontSize: 40 }}/>
             </IconButton>
 
@@ -23,7 +75,7 @@ const BotonesSwipe = () => {
                 <StarIcon style={{ fontSize: 40 }}/>
             </IconButton>*/}
 
-            <IconButton className="botonesSwipe__fav">
+            <IconButton className={"botonesSwipe__fav"} >
                 <FavoriteIcon style={{ fontSize: 40 }}/>
             </IconButton>
 

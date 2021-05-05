@@ -21,8 +21,13 @@ const TarjetasTinder = () => {
     const [cumpleCondicioness, setCumpleCondiciones]= useState(null);
     const [log, setLog] = useState(false);
 
+
     const [usersPreferences, setUsersPreferences]= useState([]);
     const [usersData, setUsersData]= useState([]);
+
+
+
+
 
     const database = firebaseApp.firestore();
     const curUser = auth.currentUser;
@@ -70,6 +75,8 @@ const TarjetasTinder = () => {
             //el documento "doc id" en userdata comparte las preferencias del usuario
         ));
 
+
+
         /*console.log()
         const desuscribirse = database.collection('userImages').onSnapshot(snapshot => (
             setPersona(snapshot.docs.map( doc => !cumpleCondiciones(doc.id) && doc.data()).filter(elem => elem))
@@ -98,7 +105,8 @@ const TarjetasTinder = () => {
         if(log && usersData && usersPreferences){
             const desuscribirse = database.collection('userImages').onSnapshot(snapshot => (
                 setPersona(snapshot.docs.map( doc => cumpleCondiciones(doc.id) && doc.data()).filter(elem => elem))
-                //el documento "doc id" en userdata comparte las preferencias del usuario
+
+            //el documento "doc id" en userdata comparte las preferencias del usuario
             ));
 
             console.log(persona.length); //hay 5
@@ -110,12 +118,18 @@ const TarjetasTinder = () => {
                 desuscribirse();
             }
             console.log(cumpleCondiciones('manumasjoan@gmail.com'))
+
+
         }
     },[log, usersData, usersPreferences])
 
     useEffect(()=>{
 
+        console.log(persona[0].id)
+
     }, [persona])
+
+
 
 
     function cumpleCondiciones(docId){
