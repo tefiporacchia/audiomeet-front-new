@@ -3,6 +3,10 @@ import '../../style/home/TarjetasTinder.scss';
 import TarjetaPersona from 'react-tinder-card'
 import firebaseApp, {auth} from '../../firebase'
 import moment from 'moment';
+import {IconButton} from "@material-ui/core";
+import ReplayIcon from "@material-ui/icons/Replay";
+import CloseIcon from "@material-ui/icons/Close";
+import FavoriteIcon from "@material-ui/icons/Favorite";
 const TarjetasTinder = () => {
 
     const [persona,setPersona] = useState([]);
@@ -21,13 +25,8 @@ const TarjetasTinder = () => {
     const [cumpleCondicioness, setCumpleCondiciones]= useState(null);
     const [log, setLog] = useState(false);
 
-
     const [usersPreferences, setUsersPreferences]= useState([]);
     const [usersData, setUsersData]= useState([]);
-
-
-
-
 
     const database = firebaseApp.firestore();
     const curUser = auth.currentUser;
@@ -75,8 +74,6 @@ const TarjetasTinder = () => {
             //el documento "doc id" en userdata comparte las preferencias del usuario
         ));
 
-
-
         /*console.log()
         const desuscribirse = database.collection('userImages').onSnapshot(snapshot => (
             setPersona(snapshot.docs.map( doc => !cumpleCondiciones(doc.id) && doc.data()).filter(elem => elem))
@@ -104,10 +101,10 @@ const TarjetasTinder = () => {
     useEffect(()=> {
         if(log && usersData && usersPreferences){
             const desuscribirse = database.collection('userImages').onSnapshot(snapshot => (
-                setPersona(snapshot.docs.map( doc => cumpleCondiciones(doc.id) && doc.data()).filter(elem => elem))
-
-            //el documento "doc id" en userdata comparte las preferencias del usuario
+                setPersona(snapshot.docs.map( doc => cumpleCondiciones(doc.id) && devolverObjetoAppendeado(doc.data(),doc.id)).filter(elem => elem))
+                //el documento "doc id" en userdata comparte las preferencias del usuario
             ));
+            console.log(persona);
 
             console.log(persona.length); //hay 5
             console.log(persona.filter( (ob) => ob.nombre.includes("Tefi"))) //para filtrar json
@@ -117,19 +114,18 @@ const TarjetasTinder = () => {
             return () => {
                 desuscribirse();
             }
-            console.log(cumpleCondiciones('manumasjoan@gmail.com'))
-
 
         }
     },[log, usersData, usersPreferences])
 
     useEffect(()=>{
 
-        console.log(persona[0].id)
-
     }, [persona])
 
-
+    function devolverObjetoAppendeado(objeto, id){
+        objeto.id = id;
+        return objeto;
+    }
 
 
     function cumpleCondiciones(docId){
@@ -164,6 +160,115 @@ const TarjetasTinder = () => {
         return cumple
     }
 
+    const [usersLiked, setUsersLiked]= useState([]);
+    const [myUsersLiked, setMyUsersLiked]= useState([]);
+    const [lastRejected,setLastRejected]= useState(null);
+
+
+    //cargo todas las personas con sus likes
+    const desuscribirse3 = database.collection('usersLiked').onSnapshot(snapshot => (
+        setUsersLiked(snapshot.docs.map( doc => {return({id:doc.id, ...doc.data()})}))
+
+        //el documento "doc id" en userdata comparte las preferencias del usuario
+    ));
+
+    //busco mis likes
+    useEffect(()=>{
+        usersLiked.map(user => {
+            if(curUser===user.id){
+                setMyUsersLiked(user.myUsersLiked)
+            }
+        })
+
+    }, [usersLiked])
+
+
+
+    const reject = event =>{
+        if(persona[persona.length-1]!==null){
+            setLastRejected(persona[persona.length-1]);
+            //tengo que eliminar ultimo elemento
+            setPersona(persona.filter(({ id }) => id !== persona[persona.length-1].id))
+
+        }
+
+    }
+
+    const undo = event =>{
+        if(lastRejected!=null){
+            //tengo que agregar al final de arreglo
+            setPersona(oldArray => [...oldArray,lastRejected]);
+        }
+    }
+
+
+    const like = event => {
+
+        if(persona[0]!==null){
+            setLastRejected(null);
+            console.log("MIS PERSONAS", persona.length) //me dice que es cero
+            console.log("MI PERSONA", persona[persona.length-1].id)// undefined
+            setMyUsersLiked(oldArray => [...oldArray, persona[persona.length-1].id]);//el problema esta aca porque no encuentra id
+
+            setPersona(persona.filter(({ id }) => id !== persona[persona.length-1].id))
+
+
+            //checkMatch(likedPerson)
+        }
+
+
+    }
+
+    useEffect(()=>{
+
+        console.log("MYUSERSLIKED", myUsersLiked)
+
+        database.collection("usersLiked").doc(curUser.email).set({
+            myUsersLiked: myUsersLiked
+
+        })
+            .then(() => {
+                console.log("Document successfully written!");
+            })
+            .catch((error) => {
+                console.error("Error writing document: ", error);
+            });
+
+    }, [myUsersLiked])
+
+
+
+    /**
+    const [likes, setLikes]= useState([]);
+
+    function checkMatch(likedPerson){
+        //busco likes de likedPerson
+        usersLiked.map(user => {
+            if(likedPerson.id===user.id){
+                setLikes(user.myUsersLiked)
+            }
+        })
+
+        //verifico si estoy en esos likes
+        likes.map(user => {
+            if(curUser.email===user){
+                database.collection("matches").doc(curUser.email+"$"+likedPerson.id).set({
+                    match: true //esto despues lo tengo que cambiar dependiendo como sea el chat
+
+                })
+                    .then(() => {
+                        console.log("Document successfully written!");
+                    })
+                    .catch((error) => {
+                        console.error("Error writing document: ", error);
+                    });
+
+            }
+        })
+
+
+    }**/
+
     return (
 
         <div className="tarjetasTinder">
@@ -179,9 +284,11 @@ const TarjetasTinder = () => {
                             className="tarjeta"
                             style={{backgroundImage:`url(${persona.userImages ? persona.userImages[0] : undefined})`}}
                         >
-                            <h2>{persona.username}</h2>
-                            <h4>{persona.description}</h4>
+                            <h2>{usersData.find(x => x.id === persona.id).username}</h2>
+                            <h4>{usersData.find(x => x.id === persona.id).description}</h4>
                         </div>
+
+
 
                     </TarjetaPersona>
 
@@ -192,8 +299,25 @@ const TarjetasTinder = () => {
 
 
                 ))}
+
+            </div>
+
+            <div className="botonesSwipe">
+                <IconButton className={"botonesSwipe__replay"} onClick={undo}>
+                    <ReplayIcon style={{ fontSize: 40 }}/>
+                </IconButton>
+
+                <IconButton className={"botonesSwipe__close"} onClick={reject}>
+                    <CloseIcon style={{ fontSize: 40 }}/>
+                </IconButton>
+
+                <IconButton className={"botonesSwipe__fav"} onClick={like}>
+                    <FavoriteIcon style={{ fontSize: 40 }}/>
+                </IconButton>
+
             </div>
         </div>
+
 
     )
 }

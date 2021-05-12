@@ -15,7 +15,6 @@ const Navigation = ({}) => {
         <div className="navigation">
             <Header />
             <TarjetasTinder />
-            <BotonesSwipe />
         </div>
     )
 }

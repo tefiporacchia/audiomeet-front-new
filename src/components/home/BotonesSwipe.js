@@ -13,6 +13,7 @@ const BotonesSwipe = () => {
     const database = firebaseApp.firestore();
     const curUser = auth.currentUser;
 
+
     const [usersLiked, setUsersLiked]= useState([]);
     const [myUsersLiked, setMyUsersLiked]= useState([]);
     const [lastRejected,setLastRejected]= useState(null);
@@ -33,37 +34,54 @@ const BotonesSwipe = () => {
 
     }, [usersLiked])
 
+
+
     function reject(rejectedPerson){
-        setLastRejected(rejectedPerson);
+        if(rejectedPerson!==null){
+            setLastRejected(rejectedPerson);
+            //persona.shift();
+            //persona.pop(); si esta atras
+        }
+
     }
 
     function undo(){
         if(lastRejected!=null){
-            like(lastRejected)
+            //persona.push(lastRejected) si va de atras para adelante
+            //persona.unshift(lastRejected)
         }
     }
 
-    function like(likedPersonId){
 
-        setLastRejected(null);
-        myUsersLiked.push(likedPersonId)
+    function like(likedPerson){
 
-        database.collection("usersLiked").doc(curUser.email).set({
-            myUsersLiked: myUsersLiked
+        if(likedPerson!==null){
+            setLastRejected(null);
+            //console.log("MI PERSONA", persona)
+            myUsersLiked.push(likedPerson.id)
+            const usersILiked = myUsersLiked.map((obj)=> {return Object.assign({}, obj)});
 
-        })
-            .then(() => {
-                console.log("Document successfully written!");
+            database.collection("usersLiked").doc(curUser.email).set({
+                myUsersLiked: usersILiked
+
             })
-            .catch((error) => {
-                console.error("Error writing document: ", error);
-            });
+                .then(() => {
+                    console.log("Document successfully written!");
+                })
+                .catch((error) => {
+                    console.error("Error writing document: ", error);
+                });
+
+            //persona.shift();
+            //persona.pop(); si esta atras
+        }
+
+
 
     }
-
     return (
         <div className="botonesSwipe">
-            <IconButton className={"botonesSwipe__replay"} >
+            <IconButton className={"botonesSwipe__replay"} onClick={undo()}>
                 <ReplayIcon style={{ fontSize: 40 }}/>
             </IconButton>
 
