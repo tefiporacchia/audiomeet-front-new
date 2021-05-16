@@ -124,6 +124,11 @@ const TarjetasTinder = () => {
 
 
 
+    function devolverObjetoAppendeado(objeto, id){
+        objeto.id = id;
+        return objeto;
+    }
+
 
     function devolverObjetoAppendeado(objeto, id){
         objeto.id = id;
