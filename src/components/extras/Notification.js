@@ -4,7 +4,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 
-const Notification = () => {
+const Notification = ({name}) => {
     const [state, setState] = React.useState({
         open: false,
         vertical: 'top',
@@ -27,6 +27,8 @@ const Notification = () => {
         </React.Fragment>
     );
 
+
+
     return (
         <div>
             {buttons}
@@ -34,7 +36,7 @@ const Notification = () => {
                 anchorOrigin={{ vertical, horizontal }}
                 open={open}
                 onClose={handleClose}
-                message="I love snacks"
+                message={"You got yourself a match with " +name+ " !"}
                 autoHideDuration={3000}
                 key={vertical + horizontal}
                 action={
