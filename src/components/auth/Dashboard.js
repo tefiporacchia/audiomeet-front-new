@@ -23,13 +23,13 @@ export default function Dashboard() {
     return (
         <div style={{display: "flex", flexDirection: "row"}}>
             <div>
-                <span>this is an img</span>
+                <img src={'/assets/vector-creator.png'} id={'brand-logo'} alt={'brand-logo'} className={'picc'} height={'350'} width={'350'}/>
             </div>
             <div
                 className="d-flex w-100 align-items-center justify-content-center"
                 style={{minHeight: "100vh"}}>
 
-                <div className="w-100" style={{maxWidth: "400px", marginRight: "1rem"}}>
+                <div className="w-100" style={{maxWidth: "400px", marginRight: "26rem"}}>
                     <Card>
                         <Card.Body>
                             <h2 className="text-center mb-4">Profile Data</h2>

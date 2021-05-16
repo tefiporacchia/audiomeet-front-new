@@ -144,6 +144,24 @@ button:hover {
   margin-bottom: 16px;
   color: black;
   display: flex;
-  font-family: "Helvetica";
+  font-family: "Raleway", sans-serif
+  //font-family: "Helvetica";
+}
+
+.headerPics {
+  padding: 30px;
+  text-align: center;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ffffff;
+  background: linear-gradient(0.10turn, #EB7923, #E43D44, #EB7923);
+  box-shadow: 0 10px 50px 0 rgba(0, 0, 0, 0.119);
+}
+
+.imgup{
+  font-family: sans-serif;
+  font-size: 30px;
 }
 

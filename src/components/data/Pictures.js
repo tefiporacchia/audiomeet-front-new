@@ -120,8 +120,11 @@ const Pictures = () => {
 
 
     return (
+        <>
+        <div className="headerPics">
+            <span className={'imgup'}>Image Uploading</span>
+        </div>
         <div className="Pictures">
-            <span className={'title'}>Image uploading</span>
             <ImageUploading
                 multiple={true}
                 value={images}
@@ -175,6 +178,7 @@ const Pictures = () => {
                 )}
             </ImageUploading>
         </div>
+        </>
     );
 }
 export default Pictures;
