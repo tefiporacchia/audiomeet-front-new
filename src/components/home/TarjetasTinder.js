@@ -274,7 +274,7 @@ const TarjetasTinder = () => {const database = firebaseApp.firestore();
     return (
         <div className="tarjetasTinder">
 
-            <Notification name={'stef'}/>
+            {/*<Notification name={'stef'}/>*/}
 
             <div className="tarjetasTinder__contenedor">
                 {persona.map(persona => (
