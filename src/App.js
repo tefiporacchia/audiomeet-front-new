@@ -16,6 +16,7 @@ import Navigation from "./components/home/Navigation";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 import { AuthProvider } from "./contexts/AuthContext"
 import PrivateRoute from "./contexts/PrivateRoute";
+import Notifications from "./components/extras/Notifications";
 
 function App() {
     // const historyInstance = createBrowserHistory();
@@ -28,6 +29,7 @@ function App() {
                 <Route exact path={'/register'} component={Register}/> //si el path es ese, cargame ese componente
                 <Route exact path={'/login'} component={Login}/>
                 <PrivateRoute exact path={'/preferences'} component={Preferences}/>
+                <PrivateRoute exact path={'/notifications'} component={Notifications}/>
                 <PrivateRoute exact path={'/userdata'} component={UserData}/>
                 <PrivateRoute exact path={'/pictures'} component={Pictures}/>
                 <Route path="/signup" component={SignUp} />

@@ -32,10 +32,23 @@
   margin-left: 0.4rem;
 }
 
+.matches-span{
+  font-size: 1rem;
+}
+
+
 .audiomeet-span{
   display: flex;
   align-self: center;
-  margin-right:3.3rem;
+  margin-right:-1rem;
+  font-size: 30px;
+  color: grey;
+}
+
+.notifications-span{
+  display: flex;
+  align-self: center;
+  margin-right:2rem;
   font-size: 30px;
   color: grey;
 }

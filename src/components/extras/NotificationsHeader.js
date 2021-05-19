@@ -7,11 +7,10 @@ import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import { Link, useHistory } from 'react-router-dom';
 import HomeIcon from '@material-ui/icons/Home';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import NotificationsIcon from '@material-ui/icons/Notifications';
 
 
 
-const Header = ({botonRetroceder}) => {
+const NotificationsHeader = ({botonRetroceder}) => {
 
     const historial = useHistory();
     return (
@@ -23,12 +22,12 @@ const Header = ({botonRetroceder}) => {
                 </IconButton>
 
             ) : (
-                <Link to="/dashboard">
-                <IconButton className="botonHome" >
-                    {/*<PersonIcon className="header__icon" fontSize="large" />*/}
-                    <AccountCircleIcon fontSize="large" className="header__botonRetroceder" />
-                    <span className={'home-span'}>Profile</span>
-                </IconButton>
+                <Link to="/home">
+                    <IconButton className="botonHome" >
+                        {/*<PersonIcon className="header__icon" fontSize="large" />*/}
+                        <ArrowBackIosIcon fontSize="medium" className="header__botonRetroceder" />
+                        <span className={'home-span'}>Home</span>
+                    </IconButton>
 
                 </Link>
             )}
@@ -38,16 +37,13 @@ const Header = ({botonRetroceder}) => {
                      className="header__logo"
                      alt="logo" />
             </Link>*/}
-            <span className={'audiomeet-span'}>Audiomeet</span>
+            <span className={'notifications-span'}>Notificaciones</span>
 
 
-            <Link to="/notifications">
-                <IconButton className="botonHome" >
-                    {/*<PersonIcon className="header__icon" fontSize="large" />*/}
-                    <NotificationsIcon fontSize="large" className="header__botonRetroceder" />
-                    <span className={'matches-span'}>My matches</span>
+            <Link to="/chats">
+                <IconButton>
+                    <ForumIcon className="header__icon" fontSize="large"/>
                 </IconButton>
-
             </Link>
 
 
@@ -55,4 +51,4 @@ const Header = ({botonRetroceder}) => {
     )
 }
 
-export default Header;
+export default NotificationsHeader;

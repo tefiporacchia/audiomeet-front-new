@@ -83,7 +83,7 @@ const TarjetasTinder = () => {const database = firebaseApp.firestore();
     }, [])
 
 
-    useEffect(()=>{
+    /*useEffect(()=>{
         const docRef = database.collection("matches").where("user1", "==", curUser.email)
             .get()
             .then((querySnapshot) => {
@@ -105,7 +105,7 @@ const TarjetasTinder = () => {const database = firebaseApp.firestore();
             .catch((error) => {
                 console.log("Error getting documents: ", error);
             });
-    }, [])
+    }, [])*/
 
     //------------------------------------------------------------------------------------------------------------
 
