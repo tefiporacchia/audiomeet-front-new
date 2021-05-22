@@ -29,6 +29,8 @@ const TarjetasTinder = () => {
     const [wantsFemale,setWantsFemale] = useState(null);
     const [cumpleCondicioness, setCumpleCondiciones]= useState(null);
     const [log, setLog] = useState(false);
+    const [loadedMyLikes, setLoadedMyLikes] = useState(false);
+
 
     //datos cargados
     const [usersPreferences, setUsersPreferences]= useState([]);
@@ -49,6 +51,8 @@ const TarjetasTinder = () => {
         const date_array = time.split('-')
         const years_elapsed = (new Date() - new Date(date_array[0],date_array[1],date_array[2]))/(MILLISECONDS_IN_A_YEAR);
         return Math.trunc(years_elapsed); }
+
+//CARGO DATOS
 
     useEffect(() => {
 
@@ -87,20 +91,40 @@ const TarjetasTinder = () => {
             setUsersPreferences(snapshot.docs.map( doc => {return({id:doc.id, ...doc.data()})}))
         ));
 
+        //cargo todas las personas con sus likes
+        const desuscribirse3 = database.collection('usersLiked').onSnapshot(snapshot => (
+            setUsersLiked(snapshot.docs.map( doc => {return({id:doc.id, ...doc.data()})}))
+        ));
 
+
+        database.collection("usersLiked").doc(curUser.email).get().then((snapshot) => {
+            if (snapshot.exists) {
+                //console.log("PRINT", snapshot.data())
+                setMyUsersLiked(snapshot.data().myUsersLiked)
+                console.log("sets mis likes", myUsersLiked)
+                setLoadedMyLikes(true)
+            } else {
+                console.log("No data available");
+                setLoadedMyLikes(true)
+
+            }
+        }).catch((error) => {
+            console.error(error);
+        });
 
 
     }, [])
 
+
     useEffect(() => {
 
         if(wantsFriendship !=null && noDrinksPref!=null && yesDrinksPref!=null && noSmokesPref!=null && yesSmokesPref!=null
-            && notSerious!=null && yesSerious!=null && olderThan !=null && youngerThan!=null && wantsMale!=null && wantsFemale!=null){
+            && notSerious!=null && yesSerious!=null && olderThan !=null && youngerThan!=null && wantsMale!=null && wantsFemale!=null && loadedMyLikes){
 
             setLog(true);
         }
 
-    }, [wantsFriendship, noDrinksPref, yesDrinksPref, noSmokesPref, yesSmokesPref, notSerious, yesSerious, olderThan,youngerThan,wantsMale,wantsFemale])
+    }, [wantsFriendship, noDrinksPref, yesDrinksPref, noSmokesPref, yesSmokesPref, notSerious, yesSerious, olderThan,youngerThan,wantsMale,wantsFemale,loadedMyLikes])
 
     useEffect(()=> {
         if(log && usersData && usersPreferences){
@@ -108,12 +132,6 @@ const TarjetasTinder = () => {
                 setPersona(snapshot.docs.map( doc => cumpleCondiciones(doc.id) && devolverObjetoAppendeado(doc.data(),doc.id)).filter(elem => elem))
                 //el documento "doc id" en userdata comparte las preferencias del usuario
             ));
-            console.log(persona);
-
-            console.log(persona.length); //hay 5
-            console.log(persona.filter( (ob) => ob.nombre.includes("Tefi"))) //para filtrar json
-
-            // const filtro1 = desuscribirse().filter( (auto) => auto.title.includes("Jeep"))
 
             return () => {
                 desuscribirse();
@@ -121,9 +139,6 @@ const TarjetasTinder = () => {
 
         }
     },[log, usersData, usersPreferences])
-
-
-
 
     function devolverObjetoAppendeado(objeto, id){
         objeto.id = id;
@@ -141,7 +156,8 @@ const TarjetasTinder = () => {
                     &&(data.smokes==yesSmokesPref||data.smokes!=noSmokesPref)
                     &&(get_age(data.bday)>=olderThan)&&(get_age(data.bday)<=youngerThan) && docId!= curUser.email
                     && ((preferences.friendship==wantsFriendship)==true ||(preferences.serious==yesSerious)==true || (preferences.notSerious == notSerious)==true)
-                    &&(data.gender!=wantsMale||data.gender==wantsFemale)){
+                    &&(data.gender!=wantsMale||data.gender==wantsFemale)
+                    && !myUsersLiked.includes(docId)){
                     cumple = true
                     return 1
                 }else{
@@ -156,22 +172,6 @@ const TarjetasTinder = () => {
 
 
 //FUNCION DE BOTONES
-
-//cargo todas las personas con sus likes
-    const desuscribirse3 = database.collection('usersLiked').onSnapshot(snapshot => (
-        setUsersLiked(snapshot.docs.map( doc => {return({id:doc.id, ...doc.data()})}))
-    ));
-
-    //busco mis likes
-    useEffect(()=>{
-        usersLiked.map(user => {
-            if(curUser===user.id){
-                setMyUsersLiked(user.myUsersLiked)
-            }
-        })
-
-    }, [usersLiked])
-
 
     const reject = event =>{
         if(persona[persona.length-1]!==null){
@@ -195,15 +195,20 @@ const TarjetasTinder = () => {
             setLastRejected(null);
             console.log("MIS PERSONAS", persona.length)
             console.log("MI PERSONA", persona[persona.length-1].id)
+            //agrego like a mis likes
             setMyUsersLiked(oldArray => [...oldArray, persona[persona.length-1].id]);
+            //guardo mis likes en firebase
+            writeMyLikes()
+            //set de persona que likee para buscar si es un match
+            setLikedPerson(persona[persona.length-1])
             //tengo que eliminar ultimo elemento
             setPersona(persona.filter(({ id }) => id !== persona[persona.length-1].id))
-            setLikedPerson(persona[persona.length-1])
+
         }
     }
 
     //cargo usuarios likeados a la base de datos
-    useEffect(()=>{
+    const writeMyLikes = event => {
 
         console.log("MYUSERSLIKED", myUsersLiked)
 
@@ -218,12 +223,14 @@ const TarjetasTinder = () => {
                 console.error("Error writing document: ", error);
             });
 
-    }, [myUsersLiked])
+    }
 
 
+//BUSCO MATCH
 
+    //busco likes de likedPerson
     useEffect(()=>{
-        //busco likes de likedPerson
+
         usersLiked.map(user => {
             if(likedPerson.id===user.id){
                 setLikes(user.myUsersLiked)
@@ -232,9 +239,8 @@ const TarjetasTinder = () => {
 
     }, [likedPerson])
 
-
+    //verifico si estoy en esos likes
     useEffect(()=>{
-        //verifico si estoy en esos likes
         likes.map(user => {
             if(curUser.email===user){
                 //escribo en base de datos
@@ -255,7 +261,20 @@ const TarjetasTinder = () => {
     }, [likes])
 
 
+//SWIPE
 
+    const onSwipe = (direction) => {
+        if(direction==='right'){
+            like()
+        }
+        else{
+            reject()
+        }
+    }
+
+    const outOfFrame = event => {
+        setPersona(persona.filter(({ id }) => id !== persona[persona.length-1].id))
+    }
 
 
     return (
@@ -268,6 +287,9 @@ const TarjetasTinder = () => {
                         className="swipe"
                         key={persona.name}
                         preventSwipe={['up','down']}
+                        onSwipe={onSwipe}
+                        onCardLeftScreen={outOfFrame}
+
                     >
                         <div
                             className="tarjeta"
@@ -290,6 +312,11 @@ const TarjetasTinder = () => {
                 ))}
 
             </div>
+
+            <div className="noMoreUsers" >
+                {persona.length>0 ? <h2>  </h2> : <h2>No more users found</h2>}
+            </div>
+
 
             <div className="botonesSwipe">
                 <IconButton className={"botonesSwipe__replay"} onClick={undo}>
