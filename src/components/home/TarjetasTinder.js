@@ -69,9 +69,8 @@ const TarjetasTinder = () => {
                 setWantsMale(doc.data().wantsMale);
                 setWantsFemale(doc.data().wantsFemale);
 
-
             } else {
-                // doc.data() will be undefined in this case
+
                 console.log("No such document!");
             }
         }).catch((error) => {
