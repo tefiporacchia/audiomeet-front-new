@@ -94,12 +94,9 @@ const NotificationsList = () => {
                                 <span className="notifications__item__message">is your new match!</span>
                             </div>
                             <div>
-                                {/*<div className="notifications__item__option archive js-option">*/}
+
                                     <SendIcon style={{fontSize:15, marginBottom:1.8, marginLeft:1, fill: '#029aff'}}/>
-                                {/*</div>*/}
-                                {/*<div className="notifications__item__option delete js-option">
-                                    <i className="fas fa-trash"></i>
-                                </div>*/}
+
                             </div>
                         </div>
                     ))}
