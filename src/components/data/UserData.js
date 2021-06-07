@@ -85,7 +85,28 @@ const UserData = () => {
     const [drinks, setDrinks] = useState(false);
     const [gender, setGender] = useState(false);
     const [description, setDescription] = useState("");
+    const [cameFromHome, setCameFromHome] = useState(false);
     const history = useHistory()
+
+    useEffect(()=>{
+        const curUser = auth.currentUser;
+        const docRef = database.collection("userData").doc(curUser.email);
+        docRef.get().then((doc) => {
+            if (doc.exists) {
+                setCameFromHome(true)
+            } else {
+                // doc.data() will be undefined in this case
+                console.log("No such document!");
+            }
+        }).catch((error) => {
+            console.log("Error getting document:", error);
+        });
+
+    },[])
+
+    const backToHome = event =>{
+        history.push("/");
+    }
 
     const handleChangeName = event => {
         setUsername(event.target.value)
@@ -129,7 +150,11 @@ const UserData = () => {
         })
             .then(() => {
                 console.log("Document successfully written!");
-                history.push("/preferences");
+                if(cameFromHome){
+                    history.push("/");
+                }else{
+                    history.push("/preferences");
+                }
             })
             .catch((error) => {
                 console.error("Error writing document: ", error);
@@ -151,12 +176,13 @@ const UserData = () => {
             <div id={'right-container'}>
                 <div id={'data-container'}>
                     <div id={'top-bar'}>
-                        <span id={'sing-in-p'}>Already have an account? <a href={'/signin'} id={'sign-in-a'}>Sign
-                            in</a></span>
+                        {!cameFromHome ? <span id={'sing-in-p'}>Already have an account? <a href={'/signin'} id={'sign-in-a'}>Sign
+                            in</a></span> : <span id={'sing-in-p'}>Don't want to save? <a href={'/'} id={'sign-in-a'}>Back
+                            home</a></span>}
                     </div>
                     <div id={'form-container'}>
                         <div id={'centered-container'}>
-                            <span id={'header'}>DATA</span>
+                            {cameFromHome ? <span id={'header'}>Cambiá tus datos</span>:<span id={'header'}>Datos de Usuario</span>}
                             <InputGroup>
                                 <div id={'input-container'}>
                                     {/*{(loginError) ? <Alert severity="error">Invalid credentials!</Alert> : null}
@@ -234,7 +260,7 @@ const UserData = () => {
                         </div>
                         <div id={'user-data-button-container'}>
                             <button type={'button'} className={'audiomeet-button'} onClick={submitData}>
-                                {'SIGUIENTE'}
+                                {cameFromHome ? 'CONFIRMAR!':'SIGUIENTE >'}
                             </button>
                         </div>
                     </div>

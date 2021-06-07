@@ -35,8 +35,14 @@ export default function Dashboard() {
                             <h2 className="text-center mb-4">Profile Data</h2>
                             {error && <Alert variant="danger">{error}</Alert>}
                             <strong>Email:</strong> {currentUser.email}
-                            <Link to="/update-profile" className="btn btn-primary w-100 mt-3 hoverbut" >
-                                Update Profile
+                            <Link to="/userdata" className="btn btn-primary w-100 mt-3 hoverbut" >
+                                Update My Data
+                            </Link>
+                            <Link to="/preferences" className="btn btn-primary w-100 mt-3 hoverbut" >
+                                Update Preferences
+                            </Link>
+                            <Link to="/pictures" className="btn btn-primary w-100 mt-3 hoverbut" >
+                                Update Pictures
                             </Link>
                         </Card.Body>
                     </Card>

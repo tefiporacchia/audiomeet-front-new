@@ -123,8 +123,29 @@ const Preferences = () => {
     const [friendship, setFriendship] = useState(false);
     const [wantsMale,setWantsMale]= useState(false);
     const [wantsFemale,setWantsFemale]= useState(false);
+    const [cameFromHome, setCameFromHome] = useState(false);
 
     const history = useHistory()
+
+    useEffect(()=>{
+        const curUser = auth.currentUser;
+        const docRef = database.collection("userPreferences").doc(curUser.email);
+        docRef.get().then((doc) => {
+            if (doc.exists) {
+                setCameFromHome(true)
+            } else {
+                // doc.data() will be undefined in this case
+                console.log("No such document!");
+            }
+        }).catch((error) => {
+            console.log("Error getting document:", error);
+        });
+
+    },[])
+
+    const backToHome = event =>{
+        history.push("/");
+    }
 
 
     const handleChangeYesSmokes = event => {
@@ -158,7 +179,11 @@ const Preferences = () => {
         })
             .then(() => {
                 console.log("Document successfully written!");
-                history.push("/pictures");
+                if(cameFromHome){
+                    history.push("/");
+                }else{
+                    history.push("/pictures");
+                }
             })
             .catch((error) => {
                 console.error("Error writing document: ", error);
@@ -180,12 +205,13 @@ const Preferences = () => {
             <div id={'right-container'}>
                 <div id={'data-container'}>
                     <div id={'top-bar'}>
-                        <span id={'sing-in-p'}>Already have an account? <a href={'/signin'} id={'sign-in-a'}>Sign
-                            in</a></span>
+                        {!cameFromHome ? <span id={'sing-in-p'}>Already have an account? <a href={'/signin'} id={'sign-in-a'}>Sign
+                            in</a></span> : <span id={'sing-in-p'}>Don't want to save? <a href={'/'} id={'sign-in-a'}>Back
+                            home</a></span>}
                     </div>
                     <div id={'form-container'}>
                         <div id={'centered-container'}>
-                            <span id={'header'}>Preferencias</span>
+                            {cameFromHome ? <span id={'header'}>Cambiá tus preferencias</span>:<span id={'header'}>Elegí tus preferencias</span>}
                             <InputGroup>
                                 <div id={'input-container'}>
 
@@ -279,7 +305,7 @@ const Preferences = () => {
                         </div>
                         <div id={'preferences-button-container'}>
                             <button type={'button'} className={'audiomeet-button'} onClick={submitData}>
-                                {'SIGUIENTE >'}
+                                {cameFromHome ? 'CONFIRMAR!':'SIGUIENTE >'}
                             </button>
                         </div>
                     </div>
