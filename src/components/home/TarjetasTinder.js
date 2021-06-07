@@ -48,7 +48,6 @@ const TarjetasTinder = () => {
 
 
 
-
     //------------------------------------------------------------------------------------------------------------
 
 //CARGO DATOS
@@ -160,6 +159,17 @@ const TarjetasTinder = () => {
         return objeto;
     }
 
+    function makeid() {
+        const result           = [];
+        const characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        const charactersLength = characters.length;
+        for ( var i = 0; i < 20; i++ ) {
+            result.push(characters.charAt(Math.floor(Math.random() *
+                charactersLength)));
+        }
+        return result.join('')
+    }
+
     //-------Busco usuarios que cumplen con preferencias----------------------------------------------------------
 
     function cumpleCondiciones(docId){
@@ -222,9 +232,11 @@ const TarjetasTinder = () => {
             writeMyLikes(array)
             //tengo que eliminar ultimo elemento
             setPersona(persona.filter(({ id }) => id !== persona[persona.length-1].id))
-
         }
+
     }
+
+
 
 
 
@@ -263,13 +275,15 @@ const TarjetasTinder = () => {
 
     //verifico si estoy en esos likes
     useEffect(()=>{
+        const code= makeid()
         //verifico si estoy en esos likes
         likes.map(user => {
             if(curUser.email===user){
                 //escribo en base de datos
                 database.collection("matches").doc().set({
                     user1: curUser.email,
-                    user2:likedPerson.id
+                    user2:likedPerson.id,
+                    codeChat: code
 
                 })
                     .then(() => {
