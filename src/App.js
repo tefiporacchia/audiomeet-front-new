@@ -4,6 +4,7 @@ import Login from "./components/auth/Login";
 import SignUp from "./components/auth/SignUp";
 import SignIn from "./components/auth/SignIn";
 import Dashboard from "./components/auth/Dashboard";
+import ToIgnore from "./components/chat/toIgnore";
 import Sync from "./components/data/Preferences";
 import { createBrowserHistory } from 'history';
 import Preferences from "./components/data/Preferences";
@@ -17,6 +18,8 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 import { AuthProvider } from "./contexts/AuthContext"
 import PrivateRoute from "./contexts/PrivateRoute";
 import Notifications from "./components/extras/Notifications";
+import ToIgnore2 from "./components/chat/toIgnore2";
+import Audio2 from "./components/chat/Audio2";
 
 function App() {
     // const historyInstance = createBrowserHistory();
@@ -34,6 +37,7 @@ function App() {
                 <PrivateRoute exact path={'/pictures'} component={Pictures}/>
                 <Route path="/signup" component={SignUp} />
                 <Route path="/signin" component={SignIn} />
+                <PrivateRoute path="/chat" component={Audio2} />
                 <PrivateRoute exact path="/dashboard" component={Dashboard} />
                 <PrivateRoute path="/">
                     {/*<Header />
@@ -41,6 +45,7 @@ function App() {
                     <BotonesSwipe />*/}
                     <Navigation/>
                 </PrivateRoute>
+
             </Switch>
             </AuthProvider>
         </Router>

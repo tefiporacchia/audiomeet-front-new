@@ -31,6 +31,7 @@ const Pictures = () => {
     const storageRef = storage.ref();
     const [username, setUsername] = useState("");
     const [description, setDescription] = useState("");
+    const [cameFromHome, setCameFromHome] = useState(false);
 
 
     const docRef = database.collection("userData").doc(curUser.email);
@@ -49,8 +50,20 @@ const Pictures = () => {
         console.log("Error getting document:", error);
     });
 
+    useEffect(()=>{
+        const docRef = database.collection("userImages").doc(curUser.email);
+        docRef.get().then((doc) => {
+            if (doc.exists) {
+                setCameFromHome(true)
+            } else {
+                // doc.data() will be undefined in this case
+                console.log("No such document!");
+            }
+        }).catch((error) => {
+            console.log("Error getting document:", error);
+        });
 
-
+    },[])
 
 
     const submitData = event => {
@@ -62,6 +75,10 @@ const Pictures = () => {
         //Add images url to database
         history.push("/");
 
+    }
+
+    const backToHome = event =>{
+        history.push("/");
     }
 
     function uploadToStorage(){
@@ -119,10 +136,15 @@ const Pictures = () => {
     }
 
 
+
     return (
         <>
         <div className="headerPics">
-            <span className={'imgup'}>Image Uploading</span>
+            {!cameFromHome && <span className={'imgup'}>Image Uploading</span>}
+            {cameFromHome && <span className={'imgup'}>Update your pictures!</span>}
+            {cameFromHome && <button type={'button'} className={'photos-button'} onClick={backToHome}>
+                {<span>Go back</span>}
+            </button>}
         </div>
         <div className="Pictures">
             <ImageUploading
