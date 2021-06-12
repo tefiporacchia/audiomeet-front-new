@@ -21,12 +21,13 @@ const NotificationsList = () => {
     const [notifs, setNotifs]= useState([]);
     const [names, setNames]= useState([]);
 
+
+
     useEffect(()=> {
 
             const desuscribirse = database.collection('matches').onSnapshot(snapshot => (
 
                 setNotifs(snapshot.docs.map( doc => (cumpleCondiciones(doc.data().user1) && doc.data().user2)  ||  (cumpleCondiciones(doc.data().user2) && doc.data().user1)).filter(elem => elem))
-
             ));
             console.log(notifs);
             return () => {
@@ -35,11 +36,57 @@ const NotificationsList = () => {
 
     },[])
 
+    useEffect(()=> {
+
+
+        database.collection("matches").get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                if(doc.data().user1===curUser.email){
+                    database.collection("matches").doc(doc.id).set({
+                        user1: doc.data().user1,
+                        user2:doc.data().user2,
+                        codeChat: doc.data().codeChat,
+                        user1notificado: true,
+                        user2notificado: doc.data().user2notificado,
+
+                    })
+                        .then(() => {
+                            console.log("Document successfully written!");
+                        })
+                        .catch((error) => {
+                            console.error("Error writing document: ", error);
+                        });
+                }else if (doc.data().user2===curUser.email){
+                    database.collection("matches").doc(doc.id).set({
+                        user1: doc.data().user1,
+                        user2:doc.data().user2,
+                        codeChat: doc.data().codeChat,
+                        user1notificado: doc.data().user1notificado,
+                        user2notificado: true,
+
+                    })
+                        .then(() => {
+                            console.log("Document successfully written!");
+                        })
+                        .catch((error) => {
+                            console.error("Error writing document: ", error);
+                        });
+
+                }
+            });
+        });
+
+
+
+
+    },[])
+
     function cumpleCondiciones(user){
         return user==curUser.email;
     }
 
     useEffect(()=> {
+
         if(notifs){
             const desuscribirse = database.collection('userImages').onSnapshot(snapshot => (
                 setNames(snapshot.docs.map( doc => notifs.includes(doc.id) && devolverObjetoAppendeado(doc.id,doc.data().username, doc.data().userImages[0])).filter(elem => elem))

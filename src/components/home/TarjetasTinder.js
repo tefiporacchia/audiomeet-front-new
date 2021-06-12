@@ -284,14 +284,8 @@ const TarjetasTinder = () => {
                     user1: curUser.email,
                     user2:likedPerson.id,
                     codeChat: code,
-                    /*
-
-                    no se porque no me deja poner estos dos
-
                     user1notificado: false,
                     user2notificado: false,
-
-                    */
 
                 })
                     .then(() => {
