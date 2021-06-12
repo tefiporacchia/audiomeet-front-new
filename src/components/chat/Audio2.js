@@ -2,18 +2,37 @@ import React, {useEffect, useState} from "react";
 import {Recorder} from "react-voice-recorder";
 import firebaseApp, {auth} from '../../firebase'
 import {svSE} from "@material-ui/core/locale";
+import '../../style/home/Header.scss';
+import MicIcon from '@material-ui/icons/Mic';
+import MicOffIcon from '@material-ui/icons/MicOff';
+import NotificationsIcon from "@material-ui/icons/Notifications";
+import Alert from "@material-ui/lab/Alert";
+import {IconButton, makeStyles} from "@material-ui/core";
 
-
+const useClasses = makeStyles(theme => ({
+    iconContainer: {
+        "&:hover $icon": {
+            color: 'black',
+        }
+    },
+    icon: {
+        color: '#E43D44',
+    },
+}))
 
 const Audio2  = () => {
+    const classes = useClasses()
 
     const MicRecorder = require('mic-recorder-to-mp3');
     const database = firebaseApp.firestore();
     const curUser = auth.currentUser;
     const storage = firebaseApp.storage();
-    const li = document.createElement('li');
-
-
+    const div = document.createElement('div');
+    div.setAttribute("className", "playlistCompleta");
+    const [micOn, setMicOn] = useState(false);
+    const [recorder, setRecorder] = useState(new MicRecorder({
+        bitRate: 128
+    }))
 
 
     const [messages, setMessages]= useState([]);
@@ -61,10 +80,9 @@ const Audio2  = () => {
                     const playr = new Audio(url);
                     console.log(playr)
                     playr.controls = true;
-                    li.appendChild(playr);
-                    document.querySelector('#playlist').appendChild(li);
+                    div.appendChild(playr);
+                    document.querySelector('#playlist').appendChild(div);
                 }
-
 
             } else {
 
@@ -76,26 +94,25 @@ const Audio2  = () => {
 
 
 
-
-
-
     },[])
 
     //---------Botones audio-------------------------------------------------------------------------------
 
 
 // New instance
-    const recorder = new MicRecorder({
+    /*const recorder = new MicRecorder({
         bitRate: 128
-    });
+    });*/
 
 
     const startRecording= () =>{
         recorder.start().then(() => {
             // something else
+
         }).catch((e) => {
             console.error(e);
         });
+        setMicOn(true)
     };
 
 
@@ -116,9 +133,9 @@ const Audio2  = () => {
 
             const player = new Audio(URL.createObjectURL(file));
             player.controls = true;
-            li.appendChild(player);
+            div.appendChild(player);
 
-            document.querySelector('#playlist').appendChild(li);
+            document.querySelector('#playlist').appendChild(div);
             console.log(player)
 
             //guardar a base de datos
@@ -130,6 +147,7 @@ const Audio2  = () => {
             alert('We could not retrieve your message');
             console.log(e);
         });
+        setMicOn(false)
     };
 // Start recording. Browser will request permission to use your microphone.
 
@@ -178,21 +196,20 @@ const Audio2  = () => {
     }
 
 
-    return (
+    return (<div>
+        <div className="header"><span className={'audiomeet-span'}>Chat</span></div>
         <div className="container text-center">
-            <h1>Mic Recorder to Mp3 Example</h1>
-            <p>Check your web developer tool console.</p>
 
-            <hr/>
+            <div id="playlist"></div>
 
-            <button className="btn btn-primary" onClick={startRecording}>Start recording</button>
-            <button className="btn btn-primary" onClick={stopRecording}>Stop recording</button>
+            <IconButton classes={{
+                root: classes.iconContainer
+            }}>
+            {micOn ? <MicIcon fontSize="large" className={classes.icon} onClick={stopRecording}/>
+            : <MicOffIcon fontSize="large" className={classes.icon} onClick={startRecording}/>}
+            </IconButton>
 
-            <br/>
-            <br/>
-            <br/>
-
-            <ul id="playlist"></ul>
+        </div>
         </div>
     )
 }

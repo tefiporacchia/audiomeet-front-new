@@ -283,7 +283,15 @@ const TarjetasTinder = () => {
                 database.collection("matches").doc().set({
                     user1: curUser.email,
                     user2:likedPerson.id,
-                    codeChat: code
+                    codeChat: code,
+                    /*
+
+                    no se porque no me deja poner estos dos
+
+                    user1notificado: false,
+                    user2notificado: false,
+
+                    */
 
                 })
                     .then(() => {
