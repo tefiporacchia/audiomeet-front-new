@@ -44,6 +44,7 @@ const TarjetasTinder = () => {
     const [lastRejected,setLastRejected]= useState(null);
     const [likes, setLikes]= useState([]);  //likes de liked person
     const [likedPerson, setLikedPerson]= useState(null);
+    const [alreadySwiped, setAlreadySwiped]= useState([]);
 
 
 
@@ -132,7 +133,7 @@ const TarjetasTinder = () => {
             console.log(persona);
 
             console.log(persona.length); //hay 5
-            console.log(persona.filter( (ob) => ob.nombre.includes("Tefi"))) //para filtrar json
+            //console.log(persona.filter( (ob) => ob.nombre.includes("Tefi"))) //para filtrar json
 
             // const filtro1 = desuscribirse().filter( (auto) => auto.title.includes("Jeep"))
 
@@ -156,6 +157,17 @@ const TarjetasTinder = () => {
     function devolverObjetoAppendeado(objeto, id){
         objeto.id = id;
         return objeto;
+    }
+
+    function makeid() {
+        const result           = [];
+        const characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        const charactersLength = characters.length;
+        for ( var i = 0; i < 20; i++ ) {
+            result.push(characters.charAt(Math.floor(Math.random() *
+                charactersLength)));
+        }
+        return result.join('')
     }
 
     //-------Busco usuarios que cumplen con preferencias----------------------------------------------------------
@@ -198,6 +210,7 @@ const TarjetasTinder = () => {
         if(lastRejected!=null){
             //tengo que agregar al final de arreglo
             setPersona(oldArray => [...oldArray,lastRejected]);
+            setLastRejected(null);
         }
     }
 
@@ -208,25 +221,33 @@ const TarjetasTinder = () => {
             setLastRejected(null);
             console.log("MIS PERSONAS", persona.length)
             console.log("MI PERSONA", persona[persona.length-1].id)
+            //arreglo con ultima persona likeada
+            const array= [...myUsersLiked, persona[persona.length-1].id]
+            console.log(array)
             //agrego like a mis likes
             setMyUsersLiked(oldArray => [...oldArray, persona[persona.length-1].id]);
-            //guardo mis likes en firebase
-            writeMyLikes()
             //set de persona que likee para buscar si es un match
             setLikedPerson(persona[persona.length-1])
+            //guardo mis likes en firebase
+            writeMyLikes(array)
             //tengo que eliminar ultimo elemento
             setPersona(persona.filter(({ id }) => id !== persona[persona.length-1].id))
-
         }
+
     }
 
-    //cargo usuarios likeados a la base de datos
-    const writeMyLikes = event => {
 
-        console.log("MYUSERSLIKED", myUsersLiked)
+
+
+
+
+    //cargo usuarios likeados a la base de datos
+    const writeMyLikes = (array) => {
+
+        console.log("MYUSERSLIKED 2", myUsersLiked)
 
         database.collection("usersLiked").doc(curUser.email).set({
-            myUsersLiked: myUsersLiked
+            myUsersLiked: array
 
         })
             .then(() => {
@@ -254,13 +275,15 @@ const TarjetasTinder = () => {
 
     //verifico si estoy en esos likes
     useEffect(()=>{
+        const code= makeid()
         //verifico si estoy en esos likes
         likes.map(user => {
             if(curUser.email===user){
                 //escribo en base de datos
                 database.collection("matches").doc().set({
                     user1: curUser.email,
-                    user2:likedPerson.id
+                    user2:likedPerson.id,
+                    codeChat: code
 
                 })
                     .then(() => {
@@ -275,7 +298,7 @@ const TarjetasTinder = () => {
     }, [likes])
 
 
-//SWIPE
+/**SWIPE
 
     const onSwipe = (direction) => {
         if(direction==='right'){
@@ -285,10 +308,8 @@ const TarjetasTinder = () => {
             reject()
         }
     }
-
-    const outOfFrame = event => {
-        setPersona(persona.filter(({ id }) => id !== persona[persona.length-1].id))
-    }
+ 
+ **/
 
 
     return (
@@ -301,8 +322,8 @@ const TarjetasTinder = () => {
                         className="swipe"
                         key={persona.name}
                         preventSwipe={['up','down']}
-                        onSwipe={onSwipe}
-                        onCardLeftScreen={outOfFrame}
+                        //onSwipe={onSwipe}
+                        //onCardLeftScreen={outOfFrame}
 
                     >
                         <div
