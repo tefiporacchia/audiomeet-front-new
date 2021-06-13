@@ -13,11 +13,12 @@ import '../../style/extras/NotificationsList.scss';
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
 import {blue} from "@material-ui/core/colors";
+import {useHistory} from "react-router-dom";
 
 const NotificationsList = () => {
     const database = firebaseApp.firestore();
     const curUser = auth.currentUser;
-
+    const history = useHistory()
     const [notifs, setNotifs]= useState([]);
     const [names, setNames]= useState([]);
 
@@ -125,13 +126,16 @@ const NotificationsList = () => {
 
     },[notifs])*/
 
+    const onclick = event =>{
+        history.push("/chat")
+    }
 
 
     return (
         <div className="wrapper">
             <div className="notifications">
                     {names.map(name => (
-                        <div className="notifications__item">
+                        <div className="notifications__item" onClick={onclick}>
                             <div className="notifications__item__avatar">
                                 <img
                                     src={name.image}/>
