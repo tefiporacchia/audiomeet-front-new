@@ -19,18 +19,18 @@ const Header = ({botonRetroceder}) => {
     const curUser = auth.currentUser;
 
     const [notifsToShow, setNotifsToShow]= useState([]);
-    const [cargados, setCargados] = useState(false);
+
 
 
     useEffect(()=> {
-        //if cargados == false
+
         const desuscribirse = database.collection('matches').onSnapshot(snapshot => (
         //Chequeo que user1 se llame como el usuario actual y user1notificado sea falsa, o que user2 se llame como el usuario actual y user2notificado sea falsa.
             setNotifsToShow(snapshot.docs.map( doc => (cumpleCondiciones(doc.data().user1) && doc.data().user1notificado===false)  ||  (cumpleCondiciones(doc.data().user2) && doc.data().user2notificado===false)).filter(elem => elem))
 
         ));
         console.log(notifsToShow);
-        setCargados(true)
+
         return () => {
             desuscribirse();
         }
@@ -47,7 +47,7 @@ const Header = ({botonRetroceder}) => {
 
     },[])
 
-    const valorDelBadge = notifsToShow.length ? notifsToShow.length : 3  //Solo a modo ilustrativo, despues directamente dejar solo el notifsToShow.length dentro del badge
+    const valorDelBadge = notifsToShow.length   //Solo a modo ilustrativo, despues directamente dejar solo el notifsToShow.length dentro del badge
 
 
     return (

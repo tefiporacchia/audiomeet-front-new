@@ -8,6 +8,7 @@ import MicOffIcon from '@material-ui/icons/MicOff';
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import Alert from "@material-ui/lab/Alert";
 import {IconButton, makeStyles} from "@material-ui/core";
+import '../../style/chat/Chat.scss';
 
 const useClasses = makeStyles(theme => ({
     iconContainer: {
@@ -29,13 +30,32 @@ const Audio2  = () => {
     const storage = firebaseApp.storage();
     const div = document.createElement('div');
     div.setAttribute("className", "playlistCompleta");
+    div.setAttribute("style","display: flex;flex-direction: column;marginTop:1rem;");
     const [micOn, setMicOn] = useState(false);
     const [recorder, setRecorder] = useState(new MicRecorder({
         bitRate: 128
     }))
-
+    const [messages2, setMessages2] = useState([]);
 
     const [messages, setMessages]= useState([]);
+    const [nombreDelUsuario, setNombre] = useState(null);
+
+    useEffect(()=> {
+
+        const docRef = database.collection("userData").doc(curUser.email);
+        docRef.get().then((doc) => {
+            if (doc.exists) {
+                console.log("Document data:", doc.data());
+                setNombre(doc.data().username);
+                console.log(nombreDelUsuario);
+            } else {
+
+                console.log("No such document!");
+            }
+        }).catch((error) => {
+            console.log("Error getting document:", error);
+        });
+    },[])
 
     //---------Funciones Auxiliares-------------------------------------------------------------------------------
 
@@ -59,42 +79,57 @@ const Audio2  = () => {
 
     //---------Cargo datos-------------------------------------------------------------------------------
 
+    useEffect(()=>{
+        if(messages.length>0){
+            console.log(messages)
+            //messages.forEach(myFunction)
+        }
+    },[messages])
+
+    function myFunction(item, index) {
+
+        console.log("AAAAAAAAAAAA")
+
+
+        const playr = new Audio(url);
+        console.log(playr)
+        playr.controls = true;
+
+        const conjunto = document.createElement('div');
+        const span = document.createElement('span');
+        span.innerText = item[2];
+
+        conjunto.appendChild(span);
+        conjunto.appendChild(playr);
+
+        conjunto.setAttribute("style", `display: flex;flex-direction: column;margin-top:2rem; align-items:${item[2] === nombreDelUsuario ? "flex-end" : "flex-start"}`);
+        document.querySelector('#playlist').appendChild(conjunto);
+
+
+    }
+
     useEffect(()=> {
-        const docRef = database.collection("audiosProbando").doc(code);
-        let initialArray=[]
-        docRef.get().then((doc) => {
-            if (doc.exists) {
-                console.log("Document data:", doc.data());
-                initialArray=doc.data().messages
-                setMessages(initialArray)
+        if(nombreDelUsuario!=null) {
+            const docRef = database.collection("audiosProbando").doc(code);
+            let initialArray = []
+            docRef.onSnapshot((doc) => {
+                if (doc.exists) {
+                    console.log("Document data:", doc.data());
+                    initialArray = doc.data().messages
+                    setMessages2(initialArray)
+                    let a = initialArray.map(item => item.split(","))
+                    setMessages(a)
 
-                initialArray.forEach(myFunction);
 
 
-                function myFunction(item, index) {
+                } else {
 
-                    console.log("AAAAAAAAAAAA")
-
-                    const items = item.split(',')
-                    const url=items[1]
-                    const playr = new Audio(url);
-                    console.log(playr)
-                    playr.controls = true;
-                    div.appendChild(playr);
-                    document.querySelector('#playlist').appendChild(div);
+                    console.log("No such document!");
                 }
+            })
+        }
 
-            } else {
-
-                console.log("No such document!");
-            }
-        }).catch((error) => {
-            console.log("Error getting document:", error);
-        });
-
-
-
-    },[])
+    },[nombreDelUsuario])
 
     //---------Botones audio-------------------------------------------------------------------------------
 
@@ -133,10 +168,10 @@ const Audio2  = () => {
 
             const player = new Audio(URL.createObjectURL(file));
             player.controls = true;
-            div.appendChild(player);
+            /*div.appendChild(player);
 
             document.querySelector('#playlist').appendChild(div);
-            console.log(player)
+            console.log(player)*/
 
             //guardar a base de datos
             save(file)
@@ -173,9 +208,11 @@ const Audio2  = () => {
 
         storage.ref(ref).getDownloadURL().then(function(url){
             console.log("URL",url)
-            const array= [...messages,curUser.email+","+ url]
-            setMessages(array)
+            const array= [...messages2,curUser.email+","+ url+ "," +nombreDelUsuario]
             console.log(messages)
+            console.log(array)
+            //setMessages(array)
+
 
             database.collection("audiosProbando").doc(code).set({
                 messages: array
@@ -200,7 +237,16 @@ const Audio2  = () => {
         <div className="header"><span className={'audiomeet-span'}>Chat</span></div>
         <div className="container text-center">
 
-            <div id="playlist"></div>
+            <div id="playlist">
+                {
+                    messages.map(item=><div style={{display: "flex",flexDirection: "column",marginTop:"2rem",alignItems:item[2] === nombreDelUsuario ? "flex-end" : "flex-start"}}>
+                        <span>{item[2]}</span>
+                        <audio preload="auto" src={item[1]} controls></audio>
+                    </div>)
+
+                }
+
+            </div>
 
             <IconButton classes={{
                 root: classes.iconContainer
