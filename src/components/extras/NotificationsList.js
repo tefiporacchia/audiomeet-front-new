@@ -13,31 +13,27 @@ import '../../style/extras/NotificationsList.scss';
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
 import {blue} from "@material-ui/core/colors";
-import {Link, useHistory} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 
 const NotificationsList = () => {
     const database = firebaseApp.firestore();
     const curUser = auth.currentUser;
-
+    const history = useHistory()
     const [notifs, setNotifs]= useState([]);
     const [names, setNames]= useState([]);
-    const [matches,setMatches] = useState([]);
-    const history = useHistory()
 
 
 
     useEffect(()=> {
 
-            const desuscribirse = database.collection('matches').onSnapshot(snapshot => (
+        const desuscribirse = database.collection('matches').onSnapshot(snapshot => (
 
-                setNotifs(snapshot.docs.map( doc => (cumpleCondiciones(doc.data().user1) && doc.data().user2)  ||  (cumpleCondiciones(doc.data().user2) && doc.data().user1)).filter(elem => elem)),
-                setMatches(snapshot.docs.map( doc => (cumpleCondiciones(doc.data().user1) && doc.data())  ||  (cumpleCondiciones(doc.data().user2) && doc.data())).filter(elem => elem))
-
-            ));
-            console.log(notifs);
-            return () => {
-                desuscribirse();
-            }
+            setNotifs(snapshot.docs.map( doc => (cumpleCondiciones(doc.data().user1) && doc.data().user2)  ||  (cumpleCondiciones(doc.data().user2) && doc.data().user1)).filter(elem => elem))
+        ));
+        console.log(notifs);
+        return () => {
+            desuscribirse();
+        }
 
     },[])
 
@@ -91,12 +87,10 @@ const NotificationsList = () => {
     }
 
     useEffect(()=> {
-        console.log("LO QUE HAY EN MATCHES", matches)
-        console.log("GETCODE", getCode("tefii@gmail.com"))
 
         if(notifs){
             const desuscribirse = database.collection('userImages').onSnapshot(snapshot => (
-                setNames(snapshot.docs.map( doc => notifs.includes(doc.id) && devolverObjetoAppendeado(doc.id,doc.data().username, doc.data().userImages[0],getCode(doc.id))).filter(elem => elem))
+                setNames(snapshot.docs.map( doc => notifs.includes(doc.id) && devolverObjetoAppendeado(doc.id,doc.data().username, doc.data().userImages[0])).filter(elem => elem))
             ));
 
             return () => {
@@ -106,62 +100,55 @@ const NotificationsList = () => {
     },[notifs])
 
 
-
-    function devolverObjetoAppendeado(id, name, image,code){
+    function devolverObjetoAppendeado(id, name, image){
         const object = new Object();
         object.id = id;
         object.name = name;
         object.image= image;
-        object.code=code;
         return object;
     }
 
-    function getCode(user){
-        let code=0
-        matches.forEach(function(doc){
-            if(doc.user1==user){
-                code= doc.codeChat
-            }else if(doc.user2==user){
-                code=doc.codeChat
+
+    /*useEffect(()=> {
+        setNotifs(notifs.map(notif =>(
+        database.collection("userImages").doc(notif).get().then((doc) => {
+            if (doc.exists) {
+                devolverObjetoAppendeado(notif, doc.data().username, doc.data().userImages[0])
+            } else {
+                // doc.data() will be undefined in this case
+                console.log("No such document!");
             }
+        }).catch((error) => {
+            console.log("Error getting document:", error);
         })
+        )))
+    },[notifs])*/
 
-        return code
-
+    const onclick = event =>{
+        history.push("/chat")
     }
-
-
-
-
-    const goTo = (chatCode) =>{
-        console.log("MMMMMMMMMMM")
-        if(chatCode!==0){
-            history.push("/chat/"+chatCode)
-        }
-    }
-
 
 
     return (
         <div className="wrapper">
             <div className="notifications">
-                    {names.map(name => (
-                        <div className="notifications__item" onClick={goTo(name.code)}>
-                            <div className="notifications__item__avatar" >
-                                <img
-                                    src={name.image}/>
-                            </div>
-                            <div className="notifications__item__content">
-                                <span className="notifications__item__title">{name.name}</span>
-                                <span className="notifications__item__message">is your new match!</span>
-                            </div>
-                            <div>
-
-                                    <SendIcon style={{fontSize:15, marginBottom:1.8, marginLeft:1, fill: '#029aff'}} />
-
-                            </div>
+                {names.map(name => (
+                    <div className="notifications__item" onClick={onclick}>
+                        <div className="notifications__item__avatar">
+                            <img
+                                src={name.image}/>
                         </div>
-                    ))}
+                        <div className="notifications__item__content">
+                            <span className="notifications__item__title">{name.name}</span>
+                            <span className="notifications__item__message">is your new match!</span>
+                        </div>
+                        <div>
+
+                            <SendIcon style={{fontSize:15, marginBottom:1.8, marginLeft:1, fill: '#029aff'}}/>
+
+                        </div>
+                    </div>
+                ))}
             </div>
         </div>
 
