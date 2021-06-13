@@ -131,11 +131,12 @@ const NotificationsList = () => {
     }
 
 
-    
+
 
     const goTo = (chatCode) =>{
+        console.log("MMMMMMMMMMM")
         if(chatCode!==0){
-            history.push("chat/"+chatCode)
+            history.push("/chat/"+chatCode)
         }
     }
 
