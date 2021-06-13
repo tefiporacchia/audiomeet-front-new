@@ -13,7 +13,7 @@ import '../../style/extras/NotificationsList.scss';
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
 import {blue} from "@material-ui/core/colors";
-import {Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 
 const NotificationsList = () => {
     const database = firebaseApp.firestore();
@@ -22,6 +22,7 @@ const NotificationsList = () => {
     const [notifs, setNotifs]= useState([]);
     const [names, setNames]= useState([]);
     const [matches,setMatches] = useState([]);
+    const history = useHistory()
 
 
 
@@ -130,43 +131,13 @@ const NotificationsList = () => {
     }
 
 
+    
 
-
-    const getURL = (chatCode) =>{
-        console.log("CODEEE", chatCode)
+    const goTo = (chatCode) =>{
         if(chatCode!==0){
-            const url= window.location.href
-            const url_array = url.split('notifications')
-            //console.log("location.href = '"+url_array[0]+"chat"+code+"'")
-            //return "location.href = '"+url_array[0]+"chat/"+code+"'"
-            console.log(url_array[0]+"chat/"+chatCode)
-            window.location.href=url_array[0]+"chat/"+chatCode
-
-
-
+            history.push("chat/"+chatCode)
         }
-
     }
-
-
-
-
-    /*useEffect(()=> {
-        setNotifs(notifs.map(notif =>(
-        database.collection("userImages").doc(notif).get().then((doc) => {
-            if (doc.exists) {
-                devolverObjetoAppendeado(notif, doc.data().username, doc.data().userImages[0])
-            } else {
-                // doc.data() will be undefined in this case
-                console.log("No such document!");
-            }
-        }).catch((error) => {
-            console.log("Error getting document:", error);
-        })
-        )))
-
-
-    },[notifs])*/
 
 
 
@@ -174,8 +145,8 @@ const NotificationsList = () => {
         <div className="wrapper">
             <div className="notifications">
                     {names.map(name => (
-                        <div className="notifications__item">
-                            <div className="notifications__item__avatar">
+                        <div className="notifications__item" onClick={goTo(name.code)}>
+                            <div className="notifications__item__avatar" >
                                 <img
                                     src={name.image}/>
                             </div>
@@ -185,7 +156,7 @@ const NotificationsList = () => {
                             </div>
                             <div>
 
-                                    <SendIcon style={{fontSize:15, marginBottom:1.8, marginLeft:1, fill: '#029aff'}} onClick={getURL(name.code)}/>
+                                    <SendIcon style={{fontSize:15, marginBottom:1.8, marginLeft:1, fill: '#029aff'}} />
 
                             </div>
                         </div>
