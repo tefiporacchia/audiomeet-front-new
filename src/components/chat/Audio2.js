@@ -62,8 +62,8 @@ const Audio2  = () => {
     //Busco el codigo del chat porque ese es el id del documento en la base de datos
     const url= window.location.href
     const url_array = url.split('/')
-    const code=url_array[3]
-    console.log("CODE",url_array[3])
+    const code=url_array[4]
+    console.log("CODE",url_array[4])
 
     //make id
     function makeid() {

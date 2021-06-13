@@ -13,6 +13,7 @@ import '../../style/extras/NotificationsList.scss';
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
 import {blue} from "@material-ui/core/colors";
+import {Link} from "react-router-dom";
 
 const NotificationsList = () => {
     const database = firebaseApp.firestore();
@@ -20,6 +21,7 @@ const NotificationsList = () => {
 
     const [notifs, setNotifs]= useState([]);
     const [names, setNames]= useState([]);
+    const [matches,setMatches] = useState([]);
 
 
 
@@ -27,7 +29,9 @@ const NotificationsList = () => {
 
             const desuscribirse = database.collection('matches').onSnapshot(snapshot => (
 
-                setNotifs(snapshot.docs.map( doc => (cumpleCondiciones(doc.data().user1) && doc.data().user2)  ||  (cumpleCondiciones(doc.data().user2) && doc.data().user1)).filter(elem => elem))
+                setNotifs(snapshot.docs.map( doc => (cumpleCondiciones(doc.data().user1) && doc.data().user2)  ||  (cumpleCondiciones(doc.data().user2) && doc.data().user1)).filter(elem => elem)),
+                setMatches(snapshot.docs.map( doc => (cumpleCondiciones(doc.data().user1) && doc.data())  ||  (cumpleCondiciones(doc.data().user2) && doc.data())).filter(elem => elem))
+
             ));
             console.log(notifs);
             return () => {
@@ -86,10 +90,12 @@ const NotificationsList = () => {
     }
 
     useEffect(()=> {
+        console.log("LO QUE HAY EN MATCHES", matches)
+        console.log("GETCODE", getCode("tefii@gmail.com"))
 
         if(notifs){
             const desuscribirse = database.collection('userImages').onSnapshot(snapshot => (
-                setNames(snapshot.docs.map( doc => notifs.includes(doc.id) && devolverObjetoAppendeado(doc.id,doc.data().username, doc.data().userImages[0])).filter(elem => elem))
+                setNames(snapshot.docs.map( doc => notifs.includes(doc.id) && devolverObjetoAppendeado(doc.id,doc.data().username, doc.data().userImages[0],getCode(doc.id))).filter(elem => elem))
             ));
 
             return () => {
@@ -99,13 +105,50 @@ const NotificationsList = () => {
     },[notifs])
 
 
-    function devolverObjetoAppendeado(id, name, image){
+
+    function devolverObjetoAppendeado(id, name, image,code){
         const object = new Object();
         object.id = id;
         object.name = name;
         object.image= image;
+        object.code=code;
         return object;
     }
+
+    function getCode(user){
+        let code=0
+        matches.forEach(function(doc){
+            if(doc.user1==user){
+                code= doc.codeChat
+            }else if(doc.user2==user){
+                code=doc.codeChat
+            }
+        })
+
+        return code
+
+    }
+
+
+
+
+    const getURL = (chatCode) =>{
+        console.log("CODEEE", chatCode)
+        if(chatCode!==0){
+            const url= window.location.href
+            const url_array = url.split('notifications')
+            //console.log("location.href = '"+url_array[0]+"chat"+code+"'")
+            //return "location.href = '"+url_array[0]+"chat/"+code+"'"
+            console.log(url_array[0]+"chat/"+chatCode)
+            window.location.href=url_array[0]+"chat/"+chatCode
+
+
+
+        }
+
+    }
+
+
 
 
     /*useEffect(()=> {
@@ -142,7 +185,7 @@ const NotificationsList = () => {
                             </div>
                             <div>
 
-                                    <SendIcon style={{fontSize:15, marginBottom:1.8, marginLeft:1, fill: '#029aff'}}/>
+                                    <SendIcon style={{fontSize:15, marginBottom:1.8, marginLeft:1, fill: '#029aff'}} onClick={getURL(name.code)}/>
 
                             </div>
                         </div>
