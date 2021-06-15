@@ -9,15 +9,19 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import Alert from "@material-ui/lab/Alert";
 import {IconButton, makeStyles} from "@material-ui/core";
 import '../../style/chat/Chat.scss';
+import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
+import {Link} from "react-router-dom";
 
 const useClasses = makeStyles(theme => ({
     iconContainer: {
         "&:hover $icon": {
             color: 'black',
         }
+
     },
     icon: {
         color: '#E43D44',
+
     },
 }))
 
@@ -234,7 +238,16 @@ const Audio2  = () => {
 
 
     return (<div>
-        <div className="header"><span className={'audiomeet-span'}>Chat</span></div>
+        <div className="header">
+            <Link to="/home">
+            <IconButton className="botonHome" >
+                {/*<PersonIcon className="header__icon" fontSize="large" />*/}
+                <ArrowBackIosIcon fontSize="medium" className="header__botonRetroceder" />
+                <span className={'home-span'}>Home</span>
+            </IconButton>
+
+        </Link>
+        </div>
         <div className="container text-center">
 
             <div id="playlist">
@@ -248,7 +261,7 @@ const Audio2  = () => {
 
             </div>
 
-            <IconButton classes={{
+            <IconButton id={'botoncinho'} classes={{
                 root: classes.iconContainer
             }}>
             {micOn ? <MicIcon fontSize="large" className={classes.icon} onClick={stopRecording}/>
