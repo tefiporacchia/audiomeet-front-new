@@ -14,6 +14,7 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
 import {blue} from "@material-ui/core/colors";
 import {useHistory} from "react-router-dom";
+import {useParams} from "react-router";
 
 const NotificationsList = () => {
     const database = firebaseApp.firestore();
@@ -96,15 +97,23 @@ const NotificationsList = () => {
         return user==curUser.email;
     }
 
+    useEffect(()=>{
+
+        console.log("hola ",names);
+
+    }, [names])
+
     useEffect(()=> {
         console.log("BBBB");
         console.log(notifs);
 
         //DOUBLE MAP, en vez de notifs includes poner el segundo map y un if
         if(notifs){
-            const desuscribirse = database.collection('userImages').onSnapshot(snapshot => (
-                setNames(snapshot.docs.map( doc => notifs.includes(doc.id) && devolverObjetoAppendeado(doc.id,doc.data().username, doc.data().userImages[0])).filter(elem => elem))
-            ));
+            const desuscribirse = database.collection('userImages').onSnapshot(snapshot => {
+                let array = snapshot.docs.map(doc => notifs.map(notif => (doc.id == notif.user) && devolverObjetoAppendeado(doc.id, doc.data().username, doc.data().userImages[0], notif.link)).filter(elem => elem))
+                let array2 = array.filter((item)=>item.length>0)
+                setNames(array2)
+            });
 
             return () => {
                 desuscribirse();
@@ -113,11 +122,14 @@ const NotificationsList = () => {
     },[notifs])
 
 
-    function devolverObjetoAppendeado(id, name, image){
+    function devolverObjetoAppendeado(id, name, image, link){
+
+        //hacer que reciba el link tmb en los parametros, lo consigue de la posicion de notifs en cuestion
         const object = new Object();
         object.id = id;
         object.name = name;
         object.image= image;
+        object.link = link;
         return object;
     }
 
@@ -139,8 +151,13 @@ const NotificationsList = () => {
 
     },[notifs])*/
 
-    const onclick = event =>{
-        history.push("/chat")
+
+    //recibe el parametro de "link"
+    const onclick = ( val) =>{
+        console.log("AAAABBBB")
+        console.log(val)
+        history.push(`/${val}`);
+        //chat/:id
     }
 
 
@@ -148,13 +165,15 @@ const NotificationsList = () => {
         <div className="wrapper">
             <div className="notifications">
                     {names.map(name => (
-                        <div className="notifications__item" onClick={onclick}>
+                        console.log("CCCCC"),
+                        console.log(name[0].link),
+                        <div className="notifications__item" onClick={() => onclick(name[0].link)}>
                             <div className="notifications__item__avatar">
                                 <img
-                                    src={name.image}/>
+                                    src={name[0].image}/>
                             </div>
                             <div className="notifications__item__content">
-                                <span className="notifications__item__title">{name.name}</span>
+                                <span className="notifications__item__title">{name[0].name}</span>
                                 <span className="notifications__item__message">is your new match!</span>
                             </div>
                             <div>
