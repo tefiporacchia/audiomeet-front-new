@@ -15,6 +15,7 @@ import BotonesSwipe from "./components/home/BotonesSwipe";
 import Header from "./components/home/Header";
 import Navigation from "./components/home/Navigation";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
+import {useParams} from "react-router";
 import { AuthProvider } from "./contexts/AuthContext"
 import PrivateRoute from "./contexts/PrivateRoute";
 import Notifications from "./components/extras/Notifications";
@@ -37,7 +38,8 @@ function App() {
                 <PrivateRoute exact path={'/pictures'} component={Pictures}/>
                 <Route path="/signup" component={SignUp} />
                 <Route path="/signin" component={SignIn} />
-                <PrivateRoute path="/chat" component={Audio2} />
+                <PrivateRoute path="/:link" component={Audio2} />
+
                 <PrivateRoute exact path="/dashboard" component={Dashboard} />
                 <PrivateRoute path="/">
                     {/*<Header />
