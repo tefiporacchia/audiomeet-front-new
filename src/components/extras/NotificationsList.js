@@ -28,14 +28,24 @@ const NotificationsList = () => {
 
             const desuscribirse = database.collection('matches').onSnapshot(snapshot => (
 
-                setNotifs(snapshot.docs.map( doc => (cumpleCondiciones(doc.data().user1) && doc.data().user2)  ||  (cumpleCondiciones(doc.data().user2) && doc.data().user1)).filter(elem => elem))
+               // setNotifs(snapshot.docs.map( doc => (cumpleCondiciones(doc.data().user1) && doc.data().user2)  ||  (cumpleCondiciones(doc.data().user2) && doc.data().user1)).filter(elem => elem))
+                setNotifs(snapshot.docs.map( doc => (cumpleCondiciones(doc.data().user1) && devolverObjetoAppendeadoCorto(doc.data().user2,doc.data().codeChat))  ||  (cumpleCondiciones(doc.data().user2) && devolverObjetoAppendeadoCorto(doc.data().user1,doc.data().codeChat))).filter(elem => elem))
             ));
+            console.log("aaaaa");
             console.log(notifs);
             return () => {
                 desuscribirse();
             }
 
     },[])
+
+    function devolverObjetoAppendeadoCorto(user, link){
+        const object = new Object();
+        object.user = user;
+        object.link = link;
+        return object;
+    }
+
 
     useEffect(()=> {
 
@@ -87,7 +97,10 @@ const NotificationsList = () => {
     }
 
     useEffect(()=> {
+        console.log("BBBB");
+        console.log(notifs);
 
+        //DOUBLE MAP, en vez de notifs includes poner el segundo map y un if
         if(notifs){
             const desuscribirse = database.collection('userImages').onSnapshot(snapshot => (
                 setNames(snapshot.docs.map( doc => notifs.includes(doc.id) && devolverObjetoAppendeado(doc.id,doc.data().username, doc.data().userImages[0])).filter(elem => elem))
