@@ -8,38 +8,49 @@ import ReplayIcon from "@material-ui/icons/Replay";
 import CloseIcon from "@material-ui/icons/Close";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import SendIcon from '@material-ui/icons/Send';
+
 import '../../style/extras/NotificationsList.scss';
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
 import {blue} from "@material-ui/core/colors";
 import {useHistory} from "react-router-dom";
-
+import {useParams} from "react-router";
 
 const NotificationsList = () => {
-
-
     const database = firebaseApp.firestore();
     const curUser = auth.currentUser;
+    const history = useHistory()
     const [notifs, setNotifs]= useState([]);
     const [names, setNames]= useState([]);
-    const [matches,setMatches] = useState([]);
-    const history = useHistory()
 
 
 
     useEffect(()=> {
+
         const desuscribirse = database.collection('matches').onSnapshot(snapshot => (
-            setMatches(snapshot.docs.map( doc => (cumpleCondiciones(doc.data().user1) && doc.data())  ||  (cumpleCondiciones(doc.data().user2) && doc.data())).filter(elem => elem)),
-            setNotifs(snapshot.docs.map( doc => (cumpleCondiciones(doc.data().user1) && doc.data().user2)  ||  (cumpleCondiciones(doc.data().user2) && doc.data().user1)).filter(elem => elem))
+
+            // setNotifs(snapshot.docs.map( doc => (cumpleCondiciones(doc.data().user1) && doc.data().user2)  ||  (cumpleCondiciones(doc.data().user2) && doc.data().user1)).filter(elem => elem))
+            setNotifs(snapshot.docs.map( doc => (cumpleCondiciones(doc.data().user1) && devolverObjetoAppendeadoCorto(doc.data().user2,doc.data().codeChat))  ||  (cumpleCondiciones(doc.data().user2) && devolverObjetoAppendeadoCorto(doc.data().user1,doc.data().codeChat))).filter(elem => elem))
         ));
+        console.log("aaaaa");
         console.log(notifs);
         return () => {
             desuscribirse();
         }
+
     },[])
+
+    function devolverObjetoAppendeadoCorto(user, link){
+        const object = new Object();
+        object.user = user;
+        object.link = link;
+        return object;
+    }
 
 
     useEffect(()=> {
+
+
         database.collection("matches").get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
                 if(doc.data().user1===curUser.email){
@@ -49,6 +60,7 @@ const NotificationsList = () => {
                         codeChat: doc.data().codeChat,
                         user1notificado: true,
                         user2notificado: doc.data().user2notificado,
+
                     })
                         .then(() => {
                             console.log("Document successfully written!");
@@ -63,6 +75,7 @@ const NotificationsList = () => {
                         codeChat: doc.data().codeChat,
                         user1notificado: doc.data().user1notificado,
                         user2notificado: true,
+
                     })
                         .then(() => {
                             console.log("Document successfully written!");
@@ -70,48 +83,54 @@ const NotificationsList = () => {
                         .catch((error) => {
                             console.error("Error writing document: ", error);
                         });
+
                 }
             });
         });
+
+
+
+
     },[])
 
     function cumpleCondiciones(user){
         return user==curUser.email;
     }
 
+    useEffect(()=>{
+
+        console.log("hola ",names);
+
+    }, [names])
 
     useEffect(()=> {
-        console.log("LO QUE HAY EN MATCHES", matches)
-        console.log("GETCODE", getCode("tefii@gmail.com"))
+        console.log("BBBB");
+        console.log(notifs);
+
+        //DOUBLE MAP, en vez de notifs includes poner el segundo map y un if
         if(notifs){
-            const desuscribirse = database.collection('userImages').onSnapshot(snapshot => (
-                setNames(snapshot.docs.map( doc => notifs.includes(doc.id) && devolverObjetoAppendeado(doc.id,doc.data().username, doc.data().userImages[0],getCode(doc.id))).filter(elem => elem))
-            ));
+            const desuscribirse = database.collection('userImages').onSnapshot(snapshot => {
+                let array = snapshot.docs.map(doc => notifs.map(notif => (doc.id == notif.user) && devolverObjetoAppendeado(doc.id, doc.data().username, doc.data().userImages[0], notif.link)).filter(elem => elem))
+                let array2 = array.filter((item)=>item.length>0)
+                setNames(array2)
+            });
+
             return () => {
                 desuscribirse();
             }
         }
     },[notifs])
 
-    function devolverObjetoAppendeado(id, name, image,code){
+
+    function devolverObjetoAppendeado(id, name, image, link){
+
+        //hacer que reciba el link tmb en los parametros, lo consigue de la posicion de notifs en cuestion
         const object = new Object();
         object.id = id;
         object.name = name;
         object.image= image;
-        object.code=code;
+        object.link = link;
         return object;
-    }
-
-    function getCode(user){
-        let code=null
-        matches.forEach(function(doc){
-            if(doc.user1==user){
-                code= doc.codeChat
-            }else if(doc.user2==user){
-                code=doc.codeChat
-            }
-        })
-        return code
     }
 
 
@@ -130,13 +149,13 @@ const NotificationsList = () => {
         )))
     },[notifs])*/
 
-    const onclick = (code) =>{
-        console.log("HOLAA",code)
-        if(code!==null){
-            const chatCode="/chat/"+code
-            history.push(chatCode)
 
-        }
+    //recibe el parametro de "link"
+    const onclick = ( val) =>{
+        console.log("AAAABBBB")
+        console.log(val)
+        history.push(`/${val}`);
+        //chat/:id
     }
 
 
@@ -144,21 +163,23 @@ const NotificationsList = () => {
         <div className="wrapper">
             <div className="notifications">
                 {names.map(name => (
-                    <div className="notifications__item" onClick={onclick(name.code)}>
-                        <div className="notifications__item__avatar">
-                            <img
-                                src={name.image}/>
-                        </div>
-                        <div className="notifications__item__content">
-                            <span className="notifications__item__title">{name.name}</span>
-                            <span className="notifications__item__message">is your new match!</span>
-                        </div>
-                        <div>
+                    console.log("CCCCC"),
+                        console.log(name[0].link),
+                        <div className="notifications__item" onClick={() => onclick(name[0].link)}>
+                            <div className="notifications__item__avatar">
+                                <img
+                                    src={name[0].image}/>
+                            </div>
+                            <div className="notifications__item__content">
+                                <span className="notifications__item__title">{name[0].name}</span>
+                                <span className="notifications__item__message">is your new match!</span>
+                            </div>
+                            <div>
 
-                            <SendIcon style={{fontSize:15, marginBottom:1.8, marginLeft:1, fill: '#029aff'}}/>
+                                <SendIcon style={{fontSize:15, marginBottom:1.8, marginLeft:1, fill: '#029aff'}}/>
 
+                            </div>
                         </div>
-                    </div>
                 ))}
             </div>
         </div>
