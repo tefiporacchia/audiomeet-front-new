@@ -38,7 +38,7 @@ function App() {
                 <PrivateRoute exact path={'/pictures'} component={Pictures}/>
                 <Route path="/signup" component={SignUp} />
                 <Route path="/signin" component={SignIn} />
-                <PrivateRoute path="/:link" component={Audio2} />
+                <PrivateRoute path="/conv/:link" component={Audio2} />
 
                 <PrivateRoute exact path="/dashboard" component={Dashboard} />
                 <PrivateRoute path="/">

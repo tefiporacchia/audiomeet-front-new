@@ -156,7 +156,7 @@ const NotificationsList = () => {
     const onclick = ( val) =>{
         console.log("AAAABBBB")
         console.log(val)
-        history.push(`/${val}`);
+        history.push(`/conv/${val}`);
         //chat/:id
     }
 
