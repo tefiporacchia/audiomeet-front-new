@@ -27,16 +27,16 @@ const NotificationsList = () => {
 
     useEffect(()=> {
 
-            const desuscribirse = database.collection('matches').onSnapshot(snapshot => (
+        const desuscribirse = database.collection('matches').onSnapshot(snapshot => (
 
-               // setNotifs(snapshot.docs.map( doc => (cumpleCondiciones(doc.data().user1) && doc.data().user2)  ||  (cumpleCondiciones(doc.data().user2) && doc.data().user1)).filter(elem => elem))
-                setNotifs(snapshot.docs.map( doc => (cumpleCondiciones(doc.data().user1) && devolverObjetoAppendeadoCorto(doc.data().user2,doc.data().codeChat))  ||  (cumpleCondiciones(doc.data().user2) && devolverObjetoAppendeadoCorto(doc.data().user1,doc.data().codeChat))).filter(elem => elem))
-            ));
-            console.log("aaaaa");
-            console.log(notifs);
-            return () => {
-                desuscribirse();
-            }
+            // setNotifs(snapshot.docs.map( doc => (cumpleCondiciones(doc.data().user1) && doc.data().user2)  ||  (cumpleCondiciones(doc.data().user2) && doc.data().user1)).filter(elem => elem))
+            setNotifs(snapshot.docs.map( doc => (cumpleCondiciones(doc.data().user1) && devolverObjetoAppendeadoCorto(doc.data().user2,doc.data().codeChat))  ||  (cumpleCondiciones(doc.data().user2) && devolverObjetoAppendeadoCorto(doc.data().user1,doc.data().codeChat))).filter(elem => elem))
+        ));
+        console.log("aaaaa");
+        console.log(notifs);
+        return () => {
+            desuscribirse();
+        }
 
     },[])
 
@@ -147,8 +147,6 @@ const NotificationsList = () => {
             console.log("Error getting document:", error);
         })
         )))
-
-
     },[notifs])*/
 
 
@@ -156,7 +154,7 @@ const NotificationsList = () => {
     const onclick = ( val) =>{
         console.log("AAAABBBB")
         console.log(val)
-        history.push(`/conv/${val}`);
+        history.push(`/chat/${val}`);
         //chat/:id
     }
 
@@ -164,8 +162,8 @@ const NotificationsList = () => {
     return (
         <div className="wrapper">
             <div className="notifications">
-                    {names.map(name => (
-                        console.log("CCCCC"),
+                {names.map(name => (
+                    console.log("CCCCC"),
                         console.log(name[0].link),
                         <div className="notifications__item" onClick={() => onclick(name[0].link)}>
                             <div className="notifications__item__avatar">
@@ -178,11 +176,11 @@ const NotificationsList = () => {
                             </div>
                             <div>
 
-                                    <SendIcon style={{fontSize:15, marginBottom:1.8, marginLeft:1, fill: '#029aff'}}/>
+                                <SendIcon style={{fontSize:15, marginBottom:1.8, marginLeft:1, fill: '#029aff'}}/>
 
                             </div>
                         </div>
-                    ))}
+                ))}
             </div>
         </div>
 
