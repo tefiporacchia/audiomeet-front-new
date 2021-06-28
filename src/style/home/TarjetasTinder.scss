@@ -13,17 +13,17 @@
 
 
 .tarjeta h2 {
-  position: absolute;
-  bottom: 40px;
+  //position: absolute;
+  //bottom: 40px;
   color: white;
-  background-color: black;
+  //background-color: black;
 }
 
 .tarjeta h4 {
-  position: absolute;
+  //position: absolute;
   color: white;
-  bottom: -1px;
-  background-color: black;
+  //bottom: -1px;
+  //background-color: black;
 }
 
 .tarjetasTinder__contenedor {
@@ -43,5 +43,18 @@
   margin-right: -50%;
   transform: translate(-50%, -50%);
   color: black;
+}
+
+.under-pic{
+  position:absolute;
+  bottom:0px;
+  width:30rem;
+  background-color: rgba(0, 0, 0, 0.5);
+  margin-left:-0.25rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  padding-top: 0.5rem;
+  padding-left: 1rem;
+  border-radius: 15px;
 }
 
