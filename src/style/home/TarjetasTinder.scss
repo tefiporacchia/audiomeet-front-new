@@ -10,16 +10,20 @@
   box-shadow: 0 20px 25px 0 rgba(0, 0, 0, 0.356);
 }
 
+
+
 .tarjeta h2 {
   position: absolute;
-  bottom: 20px;
+  bottom: 40px;
   color: white;
+  background-color: black;
 }
 
 .tarjeta h4 {
   position: absolute;
   color: white;
-  bottom: -3px;
+  bottom: -1px;
+  background-color: black;
 }
 
 .tarjetasTinder__contenedor {
@@ -40,3 +44,4 @@
   transform: translate(-50%, -50%);
   color: black;
 }
+

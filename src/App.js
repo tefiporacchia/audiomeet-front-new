@@ -4,7 +4,7 @@ import Login from "./components/auth/Login";
 import SignUp from "./components/auth/SignUp";
 import SignIn from "./components/auth/SignIn";
 import Dashboard from "./components/auth/Dashboard";
-
+import  {auth} from './firebase';
 import Sync from "./components/data/Preferences";
 import { createBrowserHistory } from 'history';
 import Preferences from "./components/data/Preferences";
@@ -21,12 +21,14 @@ import PrivateRoute from "./contexts/PrivateRoute";
 import Notifications from "./components/extras/Notifications";
 
 import Audio2 from "./components/chat/Audio2";
+const curUser = auth.currentUser;
 
 function App() {
     // const historyInstance = createBrowserHistory();
 
     return (
         // <BrowserRouter history={historyInstance}>
+        //console.log(curUser),
         <Router>
             <AuthProvider>
             <Switch>
@@ -45,8 +47,11 @@ function App() {
                     {/*<Header />
                     <TarjetasTinder />
                     <BotonesSwipe />*/}
+
                     <Navigation/>
+
                 </PrivateRoute>
+
 
             </Switch>
             </AuthProvider>

@@ -9,6 +9,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import BotonesSwipe from "./BotonesSwipe";
 import Notification from "../extras/Notification";
+import {useHistory} from "react-router-dom";
 const TarjetasTinder = () => {
 
     const database = firebaseApp.firestore();
@@ -46,6 +47,8 @@ const TarjetasTinder = () => {
     const [likedPerson, setLikedPerson]= useState(null);
     const [alreadySwiped, setAlreadySwiped]= useState([]);
 
+    const history = useHistory()
+
 
 
     //------------------------------------------------------------------------------------------------------------
@@ -53,7 +56,7 @@ const TarjetasTinder = () => {
 //CARGO DATOS
 
     useEffect(() => {
-
+        if(curUser!=null){
         const docRef = database.collection("userPreferences").doc(curUser.email);
         docRef.get().then((doc) => {
             if (doc.exists) {
@@ -80,17 +83,23 @@ const TarjetasTinder = () => {
 
         //cargo todos los datos de los usuarios
         const desuscribirse = database.collection('userData').onSnapshot(snapshot => (
-            setUsersData(snapshot.docs.map( doc => {return({id:doc.id, ...doc.data()})}))
+            setUsersData(snapshot.docs.map(doc => {
+                return ({id: doc.id, ...doc.data()})
+            }))
         ));
 
         //cargo todas las preferencias de los usuarios
         const desuscribirse2 = database.collection('userPreferences').onSnapshot(snapshot => (
-            setUsersPreferences(snapshot.docs.map( doc => {return({id:doc.id, ...doc.data()})}))
+            setUsersPreferences(snapshot.docs.map(doc => {
+                return ({id: doc.id, ...doc.data()})
+            }))
         ));
 
         //cargo todas las personas con sus likes
         const desuscribirse3 = database.collection('usersLiked').onSnapshot(snapshot => (
-            setUsersLiked(snapshot.docs.map( doc => {return({id:doc.id, ...doc.data()})}))
+            setUsersLiked(snapshot.docs.map(doc => {
+                return ({id: doc.id, ...doc.data()})
+            }))
         ));
 
 
@@ -107,7 +116,10 @@ const TarjetasTinder = () => {
             }
         }).catch((error) => {
             console.error(error);
-        });
+        });}
+        else{
+            history.push('/signup');
+        }
 
 
     }, [])
@@ -332,8 +344,11 @@ const TarjetasTinder = () => {
                             className="tarjeta"
                             style={{backgroundImage:`url(${persona.userImages ? persona.userImages[0] : undefined})`}}
                         >
-                            <h2>{usersData.find(x => x.id === persona.id).username}</h2>
-                            <h4>{usersData.find(x => x.id === persona.id).description}</h4>
+
+                            <div className="under-pic">
+                               <h2>{usersData.find(x => x.id === persona.id).username}</h2>
+                                <h4>{usersData.find(x => x.id === persona.id).description}</h4>
+                            </div>
                         </div>
 
 
