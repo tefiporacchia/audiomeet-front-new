@@ -86,7 +86,16 @@ const UserData = () => {
     const [gender, setGender] = useState(false);
     const [description, setDescription] = useState("");
     const [cameFromHome, setCameFromHome] = useState(false);
+    const [valid, setValidInfo] = useState(true);
+
     const history = useHistory()
+
+    function get_age(time){
+        const MILLISECONDS_IN_A_YEAR = 1000*60*60*24*365;
+        const date_array = time.split('-')
+        const years_elapsed = (new Date() - new Date(date_array[0],date_array[1],date_array[2]))/(MILLISECONDS_IN_A_YEAR);
+        return Math.trunc(years_elapsed);
+    }
 
     useEffect(()=>{
         const curUser = auth.currentUser;
@@ -138,27 +147,32 @@ const UserData = () => {
 
     const submitData = event => {
 
-        const curUser = auth.currentUser;
-        database.collection("userData").doc(curUser.email).set({
-            username: username,
-            bday: bday,
-            smokes: smokes,
-            drinks: drinks,
-            gender: gender,
-            description: description
+        if(get_age(bday)>=18){
+            setValidInfo(true)
+            const curUser = auth.currentUser;
+            database.collection("userData").doc(curUser.email).set({
+                username: username,
+                bday: bday,
+                smokes: smokes,
+                drinks: drinks,
+                gender: gender,
+                description: description
 
-        })
-            .then(() => {
-                console.log("Document successfully written!");
-                if(cameFromHome){
-                    history.push("/");
-                }else{
-                    history.push("/preferences");
-                }
             })
-            .catch((error) => {
-                console.error("Error writing document: ", error);
-            });
+                .then(() => {
+                    console.log("Document successfully written!");
+                    if(cameFromHome){
+                        history.push("/");
+                    }else{
+                        history.push("/preferences");
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error writing document: ", error);
+                });
+        }else{
+            setValidInfo(false)
+        }
 
     }
 
@@ -182,7 +196,7 @@ const UserData = () => {
                     </div>
                     <div id={'form-container'}>
                         <div id={'centered-container'}>
-                            {cameFromHome ? <span id={'header'}>Cambiá tus datos</span>:<span id={'header'}>Datos de Usuario</span>}
+                            {cameFromHome ? <span id={'header'}>Change your data</span>:<span id={'header'}>User data</span>}
                             <InputGroup>
                                 <div id={'input-container'}>
                                     {/*{(loginError) ? <Alert severity="error">Invalid credentials!</Alert> : null}
@@ -206,18 +220,22 @@ const UserData = () => {
                                                 }}
                                             />
                                         </form>
+
                                         <div className={'checkboxes'}>
                                         <FormControlLabel
                                             control={<GreenCheckbox checked={check.checkedSmokes} onChange={handleChangeCheck} name="checkedSmokes" />}
-                                            label="Fuma"
+                                            label="Smokes"
                                             onChange={(event) => handleChangeSmokes(event)}
                                         />
                                         <FormControlLabel
                                             control={<GreenCheckbox checked={check.checkedDrinks} onChange={handleChangeCheck} name="checkedDrinks" />}
-                                            label="Consume Alcohol"
+                                            label="Drinks alcohol"
                                             onChange={(event) => handleChangeDrinks(event)}
                                         />
                                         </div>
+                                    </div>
+                                    <div className="noValidInfo">
+                                        {valid ? <p> </p> : <p>Age must be at least 18!</p>}
                                     </div>
                                     {/*<FormControl variant="outlined" className={classes.formControl}>
                                         <InputLabel htmlFor="outlined-age-native-simple">Sexo</InputLabel>
@@ -243,8 +261,8 @@ const UserData = () => {
                                             onChange={handleChangeGender}
                                             label="gender"
                                         >
-                                            <MenuItem value={true}>Mujer</MenuItem>
-                                            <MenuItem value={false}>Hombre</MenuItem>
+                                            <MenuItem value={true}>Female</MenuItem>
+                                            <MenuItem value={false}>Male</MenuItem>
                                         </Select>
                                     </FormControl>
                                     <TextField
@@ -260,7 +278,7 @@ const UserData = () => {
                         </div>
                         <div id={'user-data-button-container'}>
                             <button type={'button'} className={'audiomeet-button'} onClick={submitData}>
-                                {cameFromHome ? 'CONFIRMAR!':'SIGUIENTE >'}
+                                {cameFromHome ? 'CONFIRM!':'NEXT >'}
                             </button>
                         </div>
                     </div>

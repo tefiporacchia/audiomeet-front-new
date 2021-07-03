@@ -43,6 +43,8 @@ const Audio2  = () => {
 
     const [messages, setMessages]= useState([]);
     const [nombreDelUsuario, setNombre] = useState(null);
+    const today = new Date();
+
 
     useEffect(()=> {
 
@@ -187,6 +189,12 @@ const Audio2  = () => {
             console.log(e);
         });
         setMicOn(false)
+
+
+
+
+
+
     };
 // Start recording. Browser will request permission to use your microphone.
 
@@ -209,10 +217,12 @@ const Audio2  = () => {
     }
 
     const saveToDatabase = (ref) =>{
+        const date = today.getDate()+ '/' +(today.getMonth() + 1)+ '/' +today.getFullYear() + '  ' + today.getHours() + ":" + today.getMinutes()  ;
+        console.log("DATE",date)
 
         storage.ref(ref).getDownloadURL().then(function(url){
             console.log("URL",url)
-            const array= [...messages2,curUser.email+","+ url+ "," +nombreDelUsuario]
+            const array= [...messages2,curUser.email+","+ url+ "," +nombreDelUsuario+ "," +date]
             console.log(messages)
             console.log(array)
             //setMessages(array)
@@ -255,6 +265,7 @@ const Audio2  = () => {
                     messages.map(item=><div style={{display: "flex",flexDirection: "column",marginTop:"2rem",alignItems:item[2] === nombreDelUsuario ? "flex-end" : "flex-start"}}>
                         <span>{item[2]}</span>
                         <audio preload="auto" src={item[1]} controls></audio>
+                        <span>{item[3]}</span>
                     </div>)
 
                 }

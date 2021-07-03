@@ -211,17 +211,17 @@ const Preferences = () => {
                     </div>
                     <div id={'form-container'}>
                         <div id={'centered-container'}>
-                            {cameFromHome ? <span id={'header'}>Cambiá tus preferencias</span>:<span id={'header'}>Elegí tus preferencias</span>}
+                            {cameFromHome ? <span id={'header'}>Change preferences</span>:<span id={'header'}>Preferences</span>}
                             <InputGroup>
                                 <div id={'input-container'}>
 
                                         <div className={'three-checkboxes'}>
-                                            <span>Quiero conocer usuarios que fumen (chequear todas las que apliquen)</span>
+                                            <span>I am looking for someone who smokes: (check all that apply)</span>
 
                                             <div className={'checkboxes-pref'}>
                                                 <FormControlLabel
                                                     control={<GreenCheckbox checked={yesSmokes} onChange={()=>setYesSmokes(!yesSmokes)} name="yesSmokes" />}
-                                                    label="Si"
+                                                    label="Yes"
 
                                                 />
                                                 <FormControlLabel
@@ -231,12 +231,12 @@ const Preferences = () => {
                                             </div>
                                         </div>
                                     <div className={'three-checkboxes'}>
-                                        <span>Quiero conocer usuarios que consuman alcohol (chequear todas las que apliquen)</span>
+                                        <span>I am looking for someone who drinks alcohol: (check all that apply)</span>
 
                                         <div className={'checkboxes-pref'}>
                                             <FormControlLabel
                                                 control={<GreenCheckbox checked={yesDrinks} onChange={()=>setYesDrinks(!yesDrinks)} name="yesDrinks" />}
-                                                label="Si"
+                                                label="Yes"
 
 
                                             />
@@ -248,38 +248,38 @@ const Preferences = () => {
                                         </div>
                                     </div>
                                     <div className={'three-checkboxes'}>
-                                        <span>Busco: (chequear todas las que apliquen)</span>
+                                        <span>I am looking for: (check all that apply)</span>
                                         <div className={'checkboxes-pref'}>
                                             <FormControlLabel
                                                 control={<GreenCheckbox checked={serious} onChange={()=>setSerious(!serious)} name="serious" />}
-                                                label="Algo serio"
+                                                label="Something serious"
 
 
                                             />
                                             <FormControlLabel
                                                 control={<GreenCheckbox checked={notSerious} onChange={()=>setNotSerious(!notSerious)} name="notSerious" />}
-                                                label="Algo no muy serio"
+                                                label="Something casual"
 
                                             />
                                             <FormControlLabel
                                                 control={<GreenCheckbox checked={friendship} onChange={()=>setFriendship(!friendship)} name="friendship" />}
-                                                label="Amistad"
+                                                label="Friendship"
 
                                             />
                                         </div>
                                     </div>
                                     <div className={'three-checkboxes'}>
-                                        <span>Busco: (chequear todas las que apliquen)</span>
+                                        <span>I am looking for: (check all that apply)</span>
                                         <div className={'checkboxes-pref'}>
                                             <FormControlLabel
                                                 control={<GreenCheckbox checked={wantsMale} onChange={()=>setWantsMale(!wantsMale)} name="wantsMale" />}
-                                                label="Hombres"
+                                                label="Male"
 
 
                                             />
                                             <FormControlLabel
                                                 control={<GreenCheckbox checked={wantsFemale} onChange={()=>setWantsFemale(!wantsFemale)} name="wantsFemale" />}
-                                                label="Mujeres"
+                                                label="Female"
 
 
                                             />
@@ -305,7 +305,7 @@ const Preferences = () => {
                         </div>
                         <div id={'preferences-button-container'}>
                             <button type={'button'} className={'audiomeet-button'} onClick={submitData}>
-                                {cameFromHome ? 'CONFIRMAR!':'SIGUIENTE >'}
+                                {cameFromHome ? 'CONFIRM!':'NEXT >'}
                             </button>
                         </div>
                     </div>

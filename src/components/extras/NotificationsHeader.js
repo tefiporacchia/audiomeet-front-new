@@ -37,7 +37,7 @@ const NotificationsHeader = ({botonRetroceder}) => {
                      className="header__logo"
                      alt="logo" />
             </Link>*/}
-            <span className={'notifications-span'}>Notificaciones</span>
+            <span className={'notifications-span'}>Notifications</span>
 
 
             <Link to="/chats">

@@ -178,7 +178,7 @@ const Pictures = () => {
                             <button className="chooseordropbutton" onClick={onImageRemoveAll}>Remove all</button>
                             </div>
                             <button type={'button'} className={'photos-button'} onClick={submitData}>
-                                {loading ? <div className="loader"/>: <span>Guardar</span>}
+                                {loading ? <div className="loader"/>: <span>Save</span>}
                             </button>
 
                         </div>
