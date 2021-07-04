@@ -265,7 +265,7 @@ const Audio2  = () => {
                     messages.map(item=><div style={{display: "flex",flexDirection: "column",marginTop:"2rem",alignItems:item[2] === nombreDelUsuario ? "flex-end" : "flex-start"}}>
                         <span>{item[2]}</span>
                         <audio preload="auto" src={item[1]} controls></audio>
-                        <span>{item[3]}</span>
+                        <span style={{fontSize:'small'}}>{item[3]}</span>
                     </div>)
 
                 }

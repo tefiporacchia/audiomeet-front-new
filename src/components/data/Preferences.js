@@ -133,6 +133,16 @@ const Preferences = () => {
         docRef.get().then((doc) => {
             if (doc.exists) {
                 setCameFromHome(true)
+                setYesSmokes(doc.data().yesSmokes);
+                setNoSmokes(doc.data().noSmokes);
+                setYesDrinks(doc.data().yesDrinks);
+                setNoDrinks(doc.data().noDrinks);
+                setSerious(doc.data().serious);
+                setNotSerious(doc.data().notSerious);
+                setFriendship(doc.data().friendship);
+                setWantsMale(doc.data().wantsMale);
+                setWantsFemale(doc.data().wantsFemale);
+                setValue([doc.data().olderThan,doc.data().youngerThn])
             } else {
                 // doc.data() will be undefined in this case
                 console.log("No such document!");

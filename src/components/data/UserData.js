@@ -66,15 +66,6 @@ const GreenCheckbox = withStyles({
 
 const UserData = () => {
 
-    const [check, setCheck] = React.useState({
-        checkedDrinks: true,
-        checkedSmokes: true,
-    });
-
-    const handleChangeCheck = (event) => {
-        setCheck({ ...check, [event.target.name]: event.target.checked });
-    };
-
     const database = firebaseApp.firestore();
 
     const [username, setUsername] = useState("");
@@ -230,14 +221,14 @@ const UserData = () => {
 
                                         <div className={'checkboxes'}>
                                         <FormControlLabel
-                                            control={<GreenCheckbox checked={cameFromHome ? smokes : check.checkedSmokes} onChange={handleChangeCheck} name="checkedSmokes" />}
+                                            control={<GreenCheckbox checked={smokes} onChange={(event) => handleChangeSmokes(event)} name="checkedSmokes" />}
                                             label="Smokes"
-                                            onChange={(event) => handleChangeSmokes(event)}
+                                            //onChange={(event) => handleChangeSmokes(event)}
                                         />
                                         <FormControlLabel
-                                            control={<GreenCheckbox checked={cameFromHome ? drinks : check.checkedDrinks} onChange={handleChangeCheck} name="checkedDrinks" />}
+                                            control={<GreenCheckbox checked={drinks} onChange={(event) => handleChangeDrinks(event)} name="checkedDrinks" />}
                                             label="Drinks alcohol"
-                                            onChange={(event) => handleChangeDrinks(event)}
+                                            //onChange={(event) => handleChangeDrinks(event)}
                                         />
                                         </div>
                                     </div>
