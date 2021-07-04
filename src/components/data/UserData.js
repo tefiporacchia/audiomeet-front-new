@@ -75,9 +75,7 @@ const UserData = () => {
         setCheck({ ...check, [event.target.name]: event.target.checked });
     };
 
-
     const database = firebaseApp.firestore();
-
 
     const [username, setUsername] = useState("");
     const [bday, setBday] = useState("");
@@ -103,6 +101,12 @@ const UserData = () => {
         docRef.get().then((doc) => {
             if (doc.exists) {
                 setCameFromHome(true)
+                setUsername(doc.data().username);
+                setBday(doc.data().bday);
+                setSmokes(doc.data().smokes);
+                setDrinks(doc.data().drinks);
+                setDescription(doc.data().description);
+                setGender(doc.data().gender);
             } else {
                 // doc.data() will be undefined in this case
                 console.log("No such document!");
@@ -126,7 +130,9 @@ const UserData = () => {
 
     }
     const handleChangeSmokes = event => {
+
         setSmokes(event.target.checked)
+
     }
     const handleChangeDrinks = event => {
         setDrinks(event.target.checked)
@@ -203,7 +209,7 @@ const UserData = () => {
                                     {emailInputError ? <Alert severity="error">Please add your email!</Alert> : null}
                                     {passwordInputError ? <Alert severity="error">Please add your password!</Alert> : null}*/}
                                     <Input className={'name-input'} type={'text'}
-                                           placeholder={'your name'} name={'email'} id={'email-input'}
+                                           placeholder={cameFromHome ? username:'Your name'} name={'email'} id={'email-input'}
                                            onChange={(event) => handleChangeName(event)}
                                            />
                                     <div className={'rowed-elements'}>
@@ -213,6 +219,7 @@ const UserData = () => {
                                                 label=""
                                                 type="date"
                                                 defaultValue="Birth date"
+                                                value={cameFromHome?bday:bday}
                                                 onChange={(event) => handleChangeDate(event)}
                                                 className={classes.textField}
                                                 InputLabelProps={{
@@ -223,12 +230,12 @@ const UserData = () => {
 
                                         <div className={'checkboxes'}>
                                         <FormControlLabel
-                                            control={<GreenCheckbox checked={check.checkedSmokes} onChange={handleChangeCheck} name="checkedSmokes" />}
+                                            control={<GreenCheckbox checked={cameFromHome ? smokes : check.checkedSmokes} onChange={handleChangeCheck} name="checkedSmokes" />}
                                             label="Smokes"
                                             onChange={(event) => handleChangeSmokes(event)}
                                         />
                                         <FormControlLabel
-                                            control={<GreenCheckbox checked={check.checkedDrinks} onChange={handleChangeCheck} name="checkedDrinks" />}
+                                            control={<GreenCheckbox checked={cameFromHome ? drinks : check.checkedDrinks} onChange={handleChangeCheck} name="checkedDrinks" />}
                                             label="Drinks alcohol"
                                             onChange={(event) => handleChangeDrinks(event)}
                                         />
@@ -265,10 +272,13 @@ const UserData = () => {
                                             <MenuItem value={false}>Male</MenuItem>
                                         </Select>
                                     </FormControl>
+
+                                    <span>Description</span>
+
                                     <TextField
                                         id="outlined-textarea"
-                                        label="Type your description.."
-                                        placeholder="Placeholder"
+                                        //label="Type your description.."
+                                        placeholder={cameFromHome?description:"Type your description.."}
                                         multiline
                                         variant="outlined"
                                         onChange={(event) => handleChangeDescription(event)}
