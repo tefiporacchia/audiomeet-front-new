@@ -55,6 +55,7 @@ const Pictures = () => {
         docRef.get().then((doc) => {
             if (doc.exists) {
                 setCameFromHome(true)
+                setImages(doc.data().userImages)
             } else {
                 // doc.data() will be undefined in this case
                 console.log("No such document!");
@@ -70,7 +71,7 @@ const Pictures = () => {
 
         //add images to storage
         uploadToStorage()
-        setTimeout(addToArray,10000)
+        //setTimeout(addToArray,10000)
         setTimeout(addToDatabase,20000)
         //Add images url to database
         history.push("/");
@@ -85,41 +86,31 @@ const Pictures = () => {
         setLoading(true)
 
         for (let i = 0; i < images.length; i++) {
+            if (images[i].data_url) {
             const message = images[i].data_url
-            storage.ref(curUser.email+'/'+i).putString(message, 'data_url').then(function(snapshot) {
-                console.log('Uploaded a data_url string!');
+            storage.ref(curUser.email + '/' + i).putString(message, 'data_url').then(function (snapshot) {
+                snapshot.ref.getDownloadURL().then(function(downloadUrl){
+                    console.log("se subió en ",downloadUrl);
+                    images[i]=downloadUrl;
+                })
             });
+
+            }
         }
 
         setLoading(true)
     }
 
-    function addToArray(){
-        storageRef.child(curUser.email).listAll().then(function(res) {
-            res.items.forEach(function(itemRef) {
-                itemRef.getDownloadURL().then(function(url){
-                    //setTimeout(function(){
-                        userImages.push(url)
-                        console.log("added "+ url)
-                    //},10000)
-
-                })
-            });
-        }).catch(function(error) {
-            console.log('Error!');
-        });
-
-    }
 
     function addToDatabase(){
 
         //const userImages=[]
         // Find all the images for user and add then to array.
-        console.log("userImages="+ userImages)
+        //console.log("userImages="+ userImages)
 
         //copy array to database
         database.collection("userImages").doc(curUser.email).set({
-            userImages: userImages,
+            userImages: images,
             username: username,
             description: description
 
@@ -134,6 +125,17 @@ const Pictures = () => {
         setLoading(false)
 
     }
+
+    const deleteFromFirebase = (url) => {
+        let pictureRef = storage.refFromURL(url);
+        pictureRef.delete()
+            .then(() => {
+
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
 
 
 
@@ -186,7 +188,7 @@ const Pictures = () => {
                         <div className="allimages">
                             {imageList.map((image, index) => (
                                 <div key={index} className="image-item">
-                                    <img src={image.data_url} alt="" width="100" />
+                                    <img src={image.data_url? image.data_url: image} alt="" width="100" />
                                     <div className="image-item__btn-wrapper">
                                         <button className="updateButton" onClick={() => onImageUpdate(index)}>↺</button>
                                         <button className="xbutton" onClick={() => onImageRemove(index)}>x</button>
