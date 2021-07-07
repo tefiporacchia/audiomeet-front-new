@@ -25,6 +25,7 @@ import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
 
 import '../../style/data/Data.scss';
+import MapSquare from "./MapSquare";
 
 const useStyles2 = makeStyles({
     root: {
@@ -312,6 +313,7 @@ const Preferences = () => {
 
                                 </div>
                             </InputGroup>
+                            <MapSquare/>
                         </div>
                         <div id={'preferences-button-container'}>
                             <button type={'button'} className={'audiomeet-button'} onClick={submitData}>

@@ -30,7 +30,7 @@
 
 .checkboxes-pref{
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
 
 }
 
@@ -39,7 +39,7 @@
   flex-direction: row;
   margin-right: 0;
   margin-left: auto;
-  margin-top: 8%;
+  margin-top: 5%;
   width: max-content;
   button {
     margin-left: 2rem;

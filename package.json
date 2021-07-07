@@ -12,6 +12,7 @@
     "connected-react-router": "^6.8.0",
     "firebase": "^8.4.1",
     "i18next": "^19.3.2",
+    "leaflet": "^1.7.1",
     "lodash": "latest",
     "mic-recorder-to-mp3": "^2.2.2",
     "moment": "^2.29.1",
@@ -20,6 +21,7 @@
     "react-bootstrap": "^1.5.2",
     "react-dom": "^17.0.2",
     "react-images-uploading": "^3.1.2",
+    "react-leaflet": "^3.2.0",
     "react-redux": "^7.2.1",
     "react-redux-i18n": "^1.9.3",
     "react-router": "^5.2.0",
@@ -46,18 +48,11 @@
       "react-app/jest"
     ]
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
+  ],
   "devDependencies": {
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
