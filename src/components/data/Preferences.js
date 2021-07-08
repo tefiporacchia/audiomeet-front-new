@@ -79,6 +79,7 @@ const Preferences = () => {
     const database = firebaseApp.firestore();
 
     const [value, setValue] = React.useState([20, 37]);
+    const [valueS, setValueS] = React.useState(20);
 
     const [check, setCheck] = React.useState({
         yesSmokes: true,
@@ -99,6 +100,11 @@ const Preferences = () => {
     const handleChangeRange = (event, newValue) => {
         setValue(newValue);
     };
+
+    const handleChangeS = (event, newValue) => {
+        setValueS(newValue);
+        setChosenRadix(newValue*1000);
+    }
 
     const [state, setState] = React.useState({
         age: '',
@@ -125,8 +131,27 @@ const Preferences = () => {
     const [wantsMale,setWantsMale]= useState(false);
     const [wantsFemale,setWantsFemale]= useState(false);
     const [cameFromHome, setCameFromHome] = useState(false);
+    const [longitud, setLongitud] = useState(0);
+    const [latitud, setLatitud] = useState(0);
+    const [chosenRadix, setChosenRadix] = useState(20000);
 
     const history = useHistory()
+
+    useEffect(() => {
+        navigator.geolocation.getCurrentPosition(
+            function (position) {
+                setLongitud(position.coords.longitude)
+                setLatitud(position.coords.latitude)
+            },
+            function (error) {
+                console.error("Error Code = " + error.code + " - " + error.message);
+            },
+            {
+                enableHighAccuracy: true,
+            }
+        );
+    }, []);
+
 
     useEffect(()=>{
         const curUser = auth.currentUser;
@@ -185,7 +210,10 @@ const Preferences = () => {
             olderThan: value[0],
             youngerThn: value[1],
             wantsMale: wantsMale,
-            wantsFemale: wantsFemale
+            wantsFemale: wantsFemale,
+            chosenRadix: chosenRadix,
+            latitude: latitud,
+            longitude:longitud
 
         })
             .then(() => {
@@ -313,7 +341,23 @@ const Preferences = () => {
 
                                 </div>
                             </InputGroup>
-                            <MapSquare/>
+                            <div className={'map-stuff'}>
+                            <MapSquare longitud={longitud} latitud={latitud} chosenRadix={chosenRadix}/>
+                                <div className={classes2.root}>
+                                <Typography id="discrete-slider-custom" gutterBottom>
+                                    Choose your distance in kms!
+                                </Typography>
+                                <Slider
+                                    value={valueS} onChange={handleChangeS}
+                                    defaultValue={chosenRadix}
+                                    getAriaValueText={valuetext}
+                                    aria-labelledby="discrete-slider-custom"
+                                    valueLabelDisplay="auto"
+
+                                />
+                                </div>
+
+                            </div>
                         </div>
                         <div id={'preferences-button-container'}>
                             <button type={'button'} className={'audiomeet-button'} onClick={submitData}>

@@ -21,6 +21,23 @@ import PrivateRoute from "./contexts/PrivateRoute";
 import Notifications from "./components/extras/Notifications";
 
 import Audio2 from "./components/chat/Audio2";
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import icon from 'leaflet/dist/images/marker-icon.png';
+import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+import audiomeetPuntero from '../src/components/data/audiomeetPuntero.png';
+
+let DefaultIcon = L.icon({
+    iconUrl: icon,
+    iconAnchor: null,
+    shadowUrl: null,
+    shadowSize: null,
+    shadowAnchor: null,
+    iconSize: [13, 20],
+});
+
+L.Marker.prototype.options.icon = DefaultIcon;
+
 const curUser = auth.currentUser;
 
 function App() {

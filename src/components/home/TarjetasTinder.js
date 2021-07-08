@@ -33,7 +33,7 @@ const TarjetasTinder = () => {
     const [cumpleCondicioness, setCumpleCondiciones]= useState(null);
     const [log, setLog] = useState(false);
     const [loadedMyLikes, setLoadedMyLikes] = useState(false);
-
+    const [chosenRadix, setChosenRadix] = useState(0);
 
     //datos cargados
     const [usersPreferences, setUsersPreferences]= useState([]);
@@ -72,6 +72,8 @@ const TarjetasTinder = () => {
                 setYoungerThan(doc.data().youngerThn);
                 setWantsMale(doc.data().wantsMale);
                 setWantsFemale(doc.data().wantsFemale);
+                setChosenRadix(doc.data().chosenRadix);
+
 
             } else {
 
@@ -183,6 +185,10 @@ const TarjetasTinder = () => {
     }
 
     //-------Busco usuarios que cumplen con preferencias----------------------------------------------------------
+
+    function cumpleCondicionesDeDistancia(desiredRadix, myLatitude, myLongitude, hisLatitude, hisLongitude){
+
+    }
 
     function cumpleCondiciones(docId){
         let cumple = false;
