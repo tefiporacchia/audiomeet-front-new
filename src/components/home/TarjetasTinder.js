@@ -34,6 +34,8 @@ const TarjetasTinder = () => {
     const [log, setLog] = useState(false);
     const [loadedMyLikes, setLoadedMyLikes] = useState(false);
     const [chosenRadix, setChosenRadix] = useState(0);
+    const [latitude, setLatitude] = useState(null);
+    const [longitude, setLongitude] = useState(null);
 
     //datos cargados
     const [usersPreferences, setUsersPreferences]= useState([]);
@@ -73,7 +75,8 @@ const TarjetasTinder = () => {
                 setWantsMale(doc.data().wantsMale);
                 setWantsFemale(doc.data().wantsFemale);
                 setChosenRadix(doc.data().chosenRadix);
-
+                setLongitude(doc.data().longitude);
+                setLatitude(doc.data().latitude);
 
             } else {
 
@@ -187,8 +190,29 @@ const TarjetasTinder = () => {
 
     //-------Busco usuarios que cumplen con preferencias----------------------------------------------------------
 
-    function cumpleCondicionesDeDistancia(desiredRadix, myLatitude, myLongitude, hisLatitude, hisLongitude){
 
+
+    function cumpleCondicionesDeDistancia(lat1, lon1, lat2, lon2)
+    {
+        var R = 6371000; // m
+        var dLat = toRad(lat2-lat1);
+        var dLon = toRad(lon2-lon1);
+        var lat1 = toRad(lat1);
+        var lat2 = toRad(lat2);
+
+        var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        var d = R * c;
+        console.log(d, " distancia", chosenRadix)
+        return d.toFixed(1)<=chosenRadix;
+
+    }
+
+    // Converts numeric degrees to radians
+    function toRad(Value)
+    {
+        return Value * Math.PI / 180;
     }
 
 
@@ -203,6 +227,7 @@ const TarjetasTinder = () => {
                     &&(get_age(data.bday)>=olderThan)&&(get_age(data.bday)<=youngerThan) && docId!= curUser.email
                     && ((preferences.friendship==wantsFriendship)==true ||(preferences.serious==yesSerious)==true || (preferences.notSerious == notSerious)==true)
                     &&(data.gender!=wantsMale||data.gender==wantsFemale)
+                    &&(cumpleCondicionesDeDistancia(preferences.latitude, preferences.longitude, latitude, longitude))
                     && !myUsersLiked.includes(docId)){
                     cumple = true
                     return 1

@@ -170,6 +170,8 @@ const Preferences = () => {
                 setWantsMale(doc.data().wantsMale);
                 setWantsFemale(doc.data().wantsFemale);
                 setValue([doc.data().olderThan,doc.data().youngerThn])
+                setChosenRadix(doc.data().chosenRadix)
+                setValueS((doc.data().chosenRadix)/1000);
             } else {
                 // doc.data() will be undefined in this case
                 console.log("No such document!");
