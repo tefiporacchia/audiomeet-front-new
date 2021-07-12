@@ -80,6 +80,7 @@ const Preferences = () => {
 
     const [value, setValue] = React.useState([20, 37]);
     const [valueS, setValueS] = React.useState(20);
+    const [submit, setSubmit] = React.useState(false);
 
     const [check, setCheck] = React.useState({
         yesSmokes: true,
@@ -189,12 +190,6 @@ const Preferences = () => {
         setYesSmokes(event.target.value)
     }
 
-    useEffect(()=>{
-        console.log("cambio smokes")
-    },[yesSmokes,noSmokes])
-
-
-
 
     const submitData = event => {
 
@@ -216,8 +211,10 @@ const Preferences = () => {
             longitude:longitud
 
         })
+
             .then(() => {
                 console.log("Document successfully written!");
+
                 if(cameFromHome){
                     history.push("/");
                 }else{
@@ -227,6 +224,7 @@ const Preferences = () => {
             .catch((error) => {
                 console.error("Error writing document: ", error);
             });
+
 
     }
 

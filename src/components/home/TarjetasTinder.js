@@ -163,6 +163,7 @@ const TarjetasTinder = () => {
 
     function get_age(time){
         const MILLISECONDS_IN_A_YEAR = 1000*60*60*24*365;
+        console.log(time)
         const date_array = time.split('-')
         const years_elapsed = (new Date() - new Date(date_array[0],date_array[1],date_array[2]))/(MILLISECONDS_IN_A_YEAR);
         return Math.trunc(years_elapsed);
@@ -189,6 +190,8 @@ const TarjetasTinder = () => {
     function cumpleCondicionesDeDistancia(desiredRadix, myLatitude, myLongitude, hisLatitude, hisLongitude){
 
     }
+
+
 
     function cumpleCondiciones(docId){
         let cumple = false;
