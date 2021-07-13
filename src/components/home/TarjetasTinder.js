@@ -10,6 +10,8 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import BotonesSwipe from "./BotonesSwipe";
 import Notification from "../extras/Notification";
 import {useHistory} from "react-router-dom";
+import emailjs from 'emailjs-com';
+
 const TarjetasTinder = () => {
 
     const database = firebaseApp.firestore();
@@ -325,6 +327,9 @@ const TarjetasTinder = () => {
         //verifico si estoy en esos likes
         likes.map(user => {
             if(curUser.email===user){
+                sendMail(curUser.email)
+                sendMail(likedPerson.id)
+
                 //escribo en base de datos
                 database.collection("matches").doc().set({
                     user1: curUser.email,
@@ -346,18 +351,23 @@ const TarjetasTinder = () => {
     }, [likes])
 
 
-/**SWIPE
 
-    const onSwipe = (direction) => {
-        if(direction==='right'){
-            like()
-        }
-        else{
-            reject()
-        }
+
+    const sendMail = (email) => {
+        var templateParams = {
+            email: email,
+            name: 'Manu'
+        };
+
+        emailjs.send('gmail', 'template_5o7eyie', templateParams,'user_qyiM1G9uABOoK56jLehef')
+            .then((result) => {
+                console.log("SUCCESS");
+            }, (error) => {
+                console.log("ERROR");
+            });
     }
  
- **/
+
 
 
     return (
