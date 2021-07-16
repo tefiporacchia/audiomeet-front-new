@@ -327,8 +327,10 @@ const TarjetasTinder = () => {
         //verifico si estoy en esos likes
         likes.map(user => {
             if(curUser.email===user){
-                sendMail(curUser.email)
-                sendMail(likedPerson.id)
+                //console.log("Nombre de USUARIO",usersData.find(x => x.id === curUser.email).username)
+                sendMail(curUser.email,usersData.find(x => x.id === likedPerson.id).username)
+                //console.log("Nombre de MATCH",usersData.find(x => x.id === likedPerson.id).username)
+                sendMail(likedPerson.id,usersData.find(x => x.id === curUser.email).username)
 
                 //escribo en base de datos
                 database.collection("matches").doc().set({
@@ -353,10 +355,10 @@ const TarjetasTinder = () => {
 
 
 
-    const sendMail = (email) => {
+    const sendMail = (email,name) => {
         var templateParams = {
             email: email,
-            name: 'Manu'
+            name: name
         };
 
         emailjs.send('gmail', 'template_5o7eyie', templateParams,'user_qyiM1G9uABOoK56jLehef')
