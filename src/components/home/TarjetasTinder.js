@@ -372,6 +372,7 @@ const TarjetasTinder = () => {
 
 
 
+
     return (
 
         <div className="tarjetasTinder">

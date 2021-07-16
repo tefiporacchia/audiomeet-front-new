@@ -11,6 +11,9 @@ import {IconButton, makeStyles} from "@material-ui/core";
 import '../../style/chat/Chat.scss';
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import {Link} from "react-router-dom";
+import ImageIcon from '@material-ui/icons/Image';
+import VideoLibraryIcon from '@material-ui/icons/VideoLibrary';
+import ImageUploading from "react-images-uploading";
 
 const useClasses = makeStyles(theme => ({
     iconContainer: {
@@ -211,18 +214,18 @@ const Audio2  = () => {
 
         storage.ref(ref).put(file).then(function(snapshot) {
             console.log('Uploaded a blob or file!');
-            saveToDatabase(ref)
+            saveToDatabase(ref,"audio")
         });
 
     }
 
-    const saveToDatabase = (ref) =>{
+    const saveToDatabase = (ref, type) =>{
         const date = today.getDate()+ '/' +(today.getMonth() + 1)+ '/' +today.getFullYear() + '  ' + today.getHours() + ":" + today.getMinutes()  ;
         console.log("DATE",date)
 
         storage.ref(ref).getDownloadURL().then(function(url){
             console.log("URL",url)
-            const array= [...messages2,curUser.email+","+ url+ "," +nombreDelUsuario+ "," +date]
+            const array= [...messages2,curUser.email+","+ url+ "," +nombreDelUsuario+ "," +date + "," +`${type}`]
             console.log(messages)
             console.log(array)
             //setMessages(array)
@@ -240,10 +243,21 @@ const Audio2  = () => {
                 });
 
         })
+    }
 
+    const uploadImage = () =>{
 
+    }
 
+    const uploadVideo = () =>{
 
+    }
+    const [file, setFile] = React.useState("");
+    function handleUpload(event) {
+        setFile(event.target.files[0]);
+
+        // Add code here to upload file to server
+        // ...
     }
 
 
@@ -264,7 +278,9 @@ const Audio2  = () => {
                 {
                     messages.map(item=><div style={{display: "flex",flexDirection: "column",marginTop:"2rem",alignItems:item[2] === nombreDelUsuario ? "flex-end" : "flex-start"}}>
                         <span>{item[2]}</span>
-                        <audio preload="auto" src={item[1]} controls></audio>
+                        {(item[4]=='img')&&<img preload="auto" src={item[1]} controls></img>}
+                        {(item[4]=='audio')&&<audio preload="auto" src={item[1]} controls></audio>}
+                        {(item[4]=='video')&&<video preload="auto" src={item[1]} controls></video>}
                         <span style={{fontSize:'small'}}>{item[3]}</span>
                     </div>)
 
@@ -272,12 +288,33 @@ const Audio2  = () => {
 
             </div>
 
-            <IconButton id={'botoncinho'} classes={{
-                root: classes.iconContainer
-            }}>
-            {micOn ? <MicIcon fontSize="large" className={classes.icon} onClick={stopRecording}/>
-            : <MicOffIcon fontSize="large" className={classes.icon} onClick={startRecording}/>}
-            </IconButton>
+            <div className={'botones'}>
+                {/*boton de imagen*/}
+                <IconButton id={'botoncinho'} classes={{
+                    root: classes.iconContainer
+                }}>
+                     <ImageIcon fontSize="large" className={classes.icon} onClick={uploadImage}/>
+                </IconButton>
+
+                <IconButton id={'botoncinho'} classes={{
+                    root: classes.iconContainer
+                }}>
+                    {micOn ? <MicIcon fontSize="large" className={classes.icon} onClick={stopRecording}/>
+                        : <MicOffIcon fontSize="large" className={classes.icon} onClick={startRecording}/>}
+                </IconButton>
+
+                {/*boton de videos*/}
+                <IconButton id={'botoncinho'} classes={{
+                    root: classes.iconContainer
+                }}>
+
+                    <VideoLibraryIcon fontSize="large" className={classes.icon} onClick={uploadVideo}>
+                        <input  type="file" onChange={handleUpload} hidden/>
+                    </VideoLibraryIcon>
+
+
+                </IconButton>
+            </div>
 
         </div>
         </div>
