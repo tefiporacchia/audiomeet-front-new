@@ -197,7 +197,7 @@ const Audio2  = () => {
             console.log(player)*/
 
             //guardar a base de datos
-            save(file)
+            save(file,"audio")
 
             //player.play();
 
@@ -219,7 +219,7 @@ const Audio2  = () => {
 
     //---------Guardar datos-------------------------------------------------------------------------------
 
-    const save = (file) =>{
+    const save = (file,type) =>{
 
         const audioId= makeid()
         const ref= code+"/"+audioId
@@ -228,7 +228,7 @@ const Audio2  = () => {
 
         storage.ref(ref).put(file).then(function(snapshot) {
             console.log('Uploaded a blob or file!');
-            saveToDatabase(ref,"audio")
+            saveToDatabase(ref,type)
         });
 
     }
@@ -259,12 +259,24 @@ const Audio2  = () => {
         })
     }
 
-    const [file, setFile] = React.useState("");
+   // const [file, setFile] = React.useState("");
+    /**
     function handleUpload(event) {
         setFile(event.target.files[0]);
         console.log(file)
         // Add code here to upload file to server
         // ...
+    }**/
+
+    const uploadMedia = (event) =>{
+        const file = event.target.files[0];
+        //setFile(event.target.files[0]);
+        console.log(file)
+        console.log(file.type)
+
+        save(file,file.type.split('/')[0])
+
+
     }
 
 
@@ -285,9 +297,9 @@ const Audio2  = () => {
                 {
                     messages.map(item=><div style={{display: "flex",flexDirection: "column",marginTop:"2rem",alignItems:item[2] === nombreDelUsuario ? "flex-end" : "flex-start"}}>
                         <span>{item[2]}</span>
-                        {(item[4]=='img')&&<img preload="auto" src={item[1]} controls></img>}
+                        {(item[4]=='image')&&<img class="chat-media" preload="auto" src={item[1]} controls></img>}
                         {(item[4]=='audio')&&<audio preload="auto" src={item[1]} controls></audio>}
-                        {(item[4]=='video')&&<video preload="auto" src={item[1]} controls></video>}
+                        {(item[4]=='video')&&<video class="chat-media" preload="auto" src={item[1]} controls></video>}
                         <span style={{fontSize:'small'}}>{item[3]}</span>
                     </div>)
 
@@ -304,7 +316,7 @@ const Audio2  = () => {
                         : <MicOffIcon fontSize="large" className={classes.icon} onClick={startRecording}/>}
                 </IconButton>
 
-                    <input accept="image/*,video/mp4,video/x-m4v,video/*" className={classes2.input} id="icon-button-file" type="file" onChange={handleUpload} />
+                    <input accept="image/*,video/mp4,video/x-m4v,video/*" className={classes2.input} id="icon-button-file" type="file" onChange={uploadMedia} />
                     <label htmlFor="icon-button-file">
                         <IconButton classes={{
                             root: classes.iconContainer
