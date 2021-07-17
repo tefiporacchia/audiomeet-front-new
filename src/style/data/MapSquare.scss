@@ -1,4 +1,9 @@
 .leaflet-container{
-  width:25vw;
-  height:25vh;
+  width:23vw;
+  height:23vh;
+}
+
+.map-stuff{
+  display: flex;
+  flex-direction: row;
 }

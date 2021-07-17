@@ -31,6 +31,14 @@ const useStyles2 = makeStyles({
     root: {
         width: 300,
         marginTop:20,
+
+    },
+});
+const useStyles3 = makeStyles({
+    root: {
+        width: 300,
+        marginTop:20,
+        marginLeft:30,
     },
 });
 const useStyles = makeStyles((theme) => ({
@@ -232,6 +240,7 @@ const Preferences = () => {
 
     const classes = useStyles();
     const classes2 = useStyles2();
+    const classes3 = useStyles3();
 
     return (
 
@@ -343,7 +352,7 @@ const Preferences = () => {
                             </InputGroup>
                             <div className={'map-stuff'}>
                             <MapSquare longitud={longitud} latitud={latitud} chosenRadix={chosenRadix}/>
-                                <div className={classes2.root}>
+                                <div className={classes3.root}>
                                 <Typography id="discrete-slider-custom" gutterBottom>
                                     Choose your distance in kms!
                                 </Typography>
