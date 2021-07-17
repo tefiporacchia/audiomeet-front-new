@@ -14,6 +14,7 @@ import {Link} from "react-router-dom";
 import ImageIcon from '@material-ui/icons/Image';
 import VideoLibraryIcon from '@material-ui/icons/VideoLibrary';
 import ImageUploading from "react-images-uploading";
+import {PhotoCamera} from "@material-ui/icons";
 
 const useClasses = makeStyles(theme => ({
     iconContainer: {
@@ -28,8 +29,21 @@ const useClasses = makeStyles(theme => ({
     },
 }))
 
+const useStyles = makeStyles((theme) => ({
+    root: {
+        '& > *': {
+            margin: theme.spacing(1),
+        },
+    },
+    input: {
+        display: 'none',
+    },
+}));
+
 const Audio2  = () => {
     const classes = useClasses()
+    const classes2 = useStyles();
+
 
     const MicRecorder = require('mic-recorder-to-mp3');
     const database = firebaseApp.firestore();
@@ -245,17 +259,10 @@ const Audio2  = () => {
         })
     }
 
-    const uploadImage = () =>{
-
-    }
-
-    const uploadVideo = () =>{
-
-    }
     const [file, setFile] = React.useState("");
     function handleUpload(event) {
         setFile(event.target.files[0]);
-
+        console.log(file)
         // Add code here to upload file to server
         // ...
     }
@@ -289,12 +296,6 @@ const Audio2  = () => {
             </div>
 
             <div className={'botones'}>
-                {/*boton de imagen*/}
-                <IconButton id={'botoncinho'} classes={{
-                    root: classes.iconContainer
-                }}>
-                     <ImageIcon fontSize="large" className={classes.icon} onClick={uploadImage}/>
-                </IconButton>
 
                 <IconButton id={'botoncinho'} classes={{
                     root: classes.iconContainer
@@ -303,17 +304,15 @@ const Audio2  = () => {
                         : <MicOffIcon fontSize="large" className={classes.icon} onClick={startRecording}/>}
                 </IconButton>
 
-                {/*boton de videos*/}
-                <IconButton id={'botoncinho'} classes={{
-                    root: classes.iconContainer
-                }}>
+                    <input accept="image/*,video/mp4,video/x-m4v,video/*" className={classes2.input} id="icon-button-file" type="file" onChange={handleUpload} />
+                    <label htmlFor="icon-button-file">
+                        <IconButton classes={{
+                            root: classes.iconContainer
+                        }} id={'botoncinho'} aria-label="upload picture" component="span">
+                            <VideoLibraryIcon fontSize="large" className={classes.icon} />
+                        </IconButton>
+                    </label>
 
-                    <VideoLibraryIcon fontSize="large" className={classes.icon} onClick={uploadVideo}>
-                        <input  type="file" onChange={handleUpload} hidden/>
-                    </VideoLibraryIcon>
-
-
-                </IconButton>
             </div>
 
         </div>
